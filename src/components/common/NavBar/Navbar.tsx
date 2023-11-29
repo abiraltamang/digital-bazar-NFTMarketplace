@@ -7,21 +7,8 @@ import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { useSDK } from "@metamask/sdk-react";
 
 const Navbar = () => {
-  const [account, setAccount] = useState<string>();
-  const { sdk, connected, connecting, provider, chainId } = useSDK();
-
-  const connect = async () => {
-    try {
-      const accounts = await sdk?.connect();
-      setAccount(accounts?.[0]);
-    } catch (err) {
-      console.warn(`failed to connect..`, err);
-    }
-  };
-
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
 
@@ -94,24 +81,9 @@ const Navbar = () => {
               <Text weight="bold">Create</Text>
             </Link>
           </div>
-          <Button
-            backgroundColor="secondary"
-            primary
-            size="medium"
-            rounded
-            onClick={connect}
-          >
+          <Button backgroundColor="secondary" primary size="medium" rounded>
             Connect Wallet
           </Button>
-          {connected && (
-            <div>
-              <>
-                {chainId && `Connected chain: ${chainId}`}
-                <p></p>
-                {account && `Connected account: ${account}`}
-              </>
-            </div>
-          )}
           <Link to="/account">
             <MdOutlineAccountCircle color="white" size="30" />
           </Link>
