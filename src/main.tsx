@@ -8,7 +8,6 @@ import Layout from "./components/layout/Layout";
 import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import Collection from "./pages/Collection";
-import { MetaMaskProvider } from "@metamask/sdk-react";
 
 const router = createBrowserRouter([
   {
@@ -38,17 +37,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <MetaMaskProvider
-      debug={false}
-      sdkOptions={{
-        checkInstallationImmediately: false,
-        dappMetadata: {
-          name: "Demo React App",
-          url: window.location.host,
-        },
-      }}
-    >
-      <RouterProvider router={router} />
-    </MetaMaskProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
