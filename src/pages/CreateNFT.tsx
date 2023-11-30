@@ -5,6 +5,11 @@ import axios from "axios";
 import { redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
+import {
+  useWeb3ModalProvider,
+  useWeb3ModalAccount,
+} from "@web3modal/ethers/react";
+import { BrowserProvider, Contract, formatUnits } from "ethers";
 
 const JWT =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI3MTU2YjMzMi1mODhlLTQ2ZTctOTQyZS0yZGE2NjNlZjA3MDQiLCJlbWFpbCI6ImFiaXJhbC50YW1hbmc4MTZAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjRkM2IyZTllMGIxZDI5NTk2Yjk4Iiwic2NvcGVkS2V5U2VjcmV0IjoiZWFiZjQwOGZkYjBkZTYwYTBkMWM0ZjNkYjA3MWE4NGEyYjNhZDJjNzBhNWQyYmFiMWZhZTJjNzIyYmQ2ZmI1YiIsImlhdCI6MTcwMTI2NTk1MH0.iwH78a4e0jTH5aNGRnp2JZo_r7Hms6VaDjxdwTTlnP8";
@@ -13,9 +18,8 @@ const JWT =
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
-console.log(marketplaceAddress);
 export const CreateNFT = () => {
-  const [fileUrl, setFileUrl] = useState(null);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [formInput, setFormInput] = useState({
     name: "",
     price: "",
@@ -23,6 +27,7 @@ export const CreateNFT = () => {
     external_url: "",
   });
 
+  //@ts-expect-error event
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -30,10 +35,11 @@ export const CreateNFT = () => {
       previewFile(file);
     }
   };
-  const previewFile = (file) => {
+  const previewFile = (file: Blob) => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
+      //@ts-expect-error result
       setFileUrl(reader.result);
     };
 
@@ -42,7 +48,7 @@ export const CreateNFT = () => {
     }
   };
 
-  const fileToIPFS = async (file) => {
+  const fileToIPFS = async (file: string | Blob) => {
     const formData = new FormData();
     formData.append("file", file);
 
@@ -62,11 +68,8 @@ export const CreateNFT = () => {
           },
         }
       );
-      console.log(res.data);
-
       const url = `ipfs://${res.data.IpfsHash}`;
       setFileUrl(url);
-      console.log(url);
     } catch (error) {
       console.log("Error uploading file to IPFS:", error);
     }
@@ -84,7 +87,7 @@ export const CreateNFT = () => {
         image: fileUrl,
       },
       pinataMetadata: {
-        name: "metadata.json",
+        name: `${name}metadata.json`,
       },
     });
     try {
@@ -104,21 +107,32 @@ export const CreateNFT = () => {
       console.log(error);
     }
   }
+  const { walletProvider } = useWeb3ModalProvider();
+  const { isConnected } = useWeb3ModalAccount();
 
   async function listNFTForSale() {
     const url = await uploadToIPFS();
-    const web3Modal = new Web3Modal({ cacheProvider: true });
-    const connection = await web3Modal.connect();
-    if (!connection) {
-      console.error("User rejected connection");
-      return;
-    }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new BrowserProvider(walletProvider);
+    if (!isConnected) throw Error("User disconnected");
+
     const signer = await provider.getSigner();
 
+    // const web3Modal = new Web3Modal({
+    //   network: "sepolia",
+    //   cacheProvider: true,
+    // });
+    // const connection = await web3Modal.connect();
+    // if (!connection) {
+    //   console.error("User rejected connection");
+    //   return;
+    // }
+
+    // const provider = new ethers.BrowserProvider(connection);
+    // const signer = await provider.getSigner();
+
     /* next, create the item */
-    const price = ethers.utils.parseUnits(formInput.price, "ether");
+    const price = ethers.parseUnits(formInput.price, "ether");
     const contract = new ethers.Contract(
       marketplaceAddress,
       NFTMarketplace.abi,

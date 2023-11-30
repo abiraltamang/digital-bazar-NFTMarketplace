@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Button from "../Button/Button";
 import { FaSearch } from "react-icons/fa";
 import Logo from "../Logo/Logo";
 import Text from "../Typography/Text";
@@ -7,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { MdLocalGroceryStore } from "react-icons/md";
+import ConnectWallet from "../Button/ConnectWallet";
 
 const Navbar = () => {
   const location = useLocation();
@@ -81,9 +81,7 @@ const Navbar = () => {
               <Text weight="bold">Create</Text>
             </Link>
           </div>
-          <Button backgroundColor="secondary" primary size="medium" rounded>
-            Connect Wallet
-          </Button>
+          <ConnectWallet />
           <Link to="/account">
             <MdOutlineAccountCircle color="white" size="30" />
           </Link>
