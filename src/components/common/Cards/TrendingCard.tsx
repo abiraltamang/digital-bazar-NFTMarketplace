@@ -6,7 +6,7 @@ type TrendingCardProps = {
 
 const TrendingCard = ({ image, title, price }: TrendingCardProps) => {
   return (
-    <div className="relative max-w-72 h-72 rounded-2xl overflow-hidden ">
+    <div className="relative max-w-xs h-72 rounded-2xl overflow-hidden ">
       <img
         src={image}
         alt="YourImage"

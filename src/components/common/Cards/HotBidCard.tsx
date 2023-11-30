@@ -10,7 +10,7 @@ interface HotBidCardProps {
 
 const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
   return (
-    <div className="bg-gray-100 max-w-md border rounded-md p-4 space-y-3">
+    <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3">
       <div className="w-full h-60 rounded-lg overflow-hidden">
         <img
           src={image}
