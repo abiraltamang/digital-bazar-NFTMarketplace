@@ -8,6 +8,7 @@ import Layout from "./components/layout/Layout";
 import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import Collection from "./pages/Collection";
+import { CreateNFT } from "./pages/CreateNFT";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/collection",
         element: <Collection />,
+      },
+      {
+        path: "/create",
+        element: <CreateNFT />,
       },
     ],
   },

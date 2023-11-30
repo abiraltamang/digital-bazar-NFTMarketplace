@@ -13,14 +13,17 @@
     "@fontsource/work-sans": "^5.0.15",
     "@heroicons/react": "^2.0.18",
     "@openzeppelin/contracts": "4.5.0",
+    "axios": "^1.6.2",
     "chai": "^4.2.0",
     "classnames": "^2.3.2",
     "dotenv": "^16.3.1",
-    "ethers": "^6.4.0",
+    "ethers": "5.5.4",
+    "form-data": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
-    "react-router-dom": "^6.20.0"
+    "react-router-dom": "^6.20.0",
+    "web3modal": "1.9.5"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
