@@ -2,14 +2,15 @@ import { useState } from "react";
 import SectionWrapper from "../components/common/SectionWrapper";
 import Text from "../components/common/Typography/Text";
 import axios from "axios";
-import { redirect } from "react-router-dom";
-import Web3Modal from "web3modal";
+import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
+import { BrowserProvider } from "ethers";
+import { Audio } from "react-loader-spinner";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
+  useWeb3Modal,
 } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, formatUnits } from "ethers";
 
 const JWT =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI3MTU2YjMzMi1mODhlLTQ2ZTctOTQyZS0yZGE2NjNlZjA3MDQiLCJlbWFpbCI6ImFiaXJhbC50YW1hbmc4MTZAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjRkM2IyZTllMGIxZDI5NTk2Yjk4Iiwic2NvcGVkS2V5U2VjcmV0IjoiZWFiZjQwOGZkYjBkZTYwYTBkMWM0ZjNkYjA3MWE4NGEyYjNhZDJjNzBhNWQyYmFiMWZhZTJjNzIyYmQ2ZmI1YiIsImlhdCI6MTcwMTI2NTk1MH0.iwH78a4e0jTH5aNGRnp2JZo_r7Hms6VaDjxdwTTlnP8";
@@ -19,6 +20,7 @@ import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
 export const CreateNFT = () => {
+  const [loading, setLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [formInput, setFormInput] = useState({
     name: "",
@@ -26,6 +28,8 @@ export const CreateNFT = () => {
     description: "",
     external_url: "",
   });
+
+  const navigate = useNavigate();
 
   //@ts-expect-error event
   const handleFileChange = (e) => {
@@ -109,46 +113,44 @@ export const CreateNFT = () => {
   }
   const { walletProvider } = useWeb3ModalProvider();
   const { isConnected } = useWeb3ModalAccount();
+  const { open } = useWeb3Modal();
 
   async function listNFTForSale() {
-    const url = await uploadToIPFS();
-
-    const provider = new BrowserProvider(walletProvider);
-    if (!isConnected) throw Error("User disconnected");
-
-    const signer = await provider.getSigner();
-
-    // const web3Modal = new Web3Modal({
-    //   network: "sepolia",
-    //   cacheProvider: true,
-    // });
-    // const connection = await web3Modal.connect();
-    // if (!connection) {
-    //   console.error("User rejected connection");
-    //   return;
-    // }
-
-    // const provider = new ethers.BrowserProvider(connection);
-    // const signer = await provider.getSigner();
-
-    /* next, create the item */
-    const price = ethers.parseUnits(formInput.price, "ether");
-    const contract = new ethers.Contract(
-      marketplaceAddress,
-      NFTMarketplace.abi,
-      signer
-    );
-    let listingPrice = await contract.getListingPrice();
-    listingPrice = listingPrice.toString();
-    const transaction = await contract.createToken(url, price, {
-      value: listingPrice,
-    });
     try {
-      await transaction.wait();
-      console.log("Transaction mined");
-      redirect("/");
+      setLoading(true);
+
+      const url = await uploadToIPFS();
+      if (!isConnected) {
+        open();
+      }
+      if (!walletProvider) {
+        throw Error("Wallet provider is undefined");
+      }
+      const provider = new BrowserProvider(walletProvider);
+      const signer = await provider.getSigner();
+
+      const price = ethers.parseUnits(formInput.price, "ether");
+      const contract = new ethers.Contract(
+        marketplaceAddress,
+        NFTMarketplace.abi,
+        signer
+      );
+      let listingPrice = await contract.getListingPrice();
+      listingPrice = listingPrice.toString();
+      const transaction = await contract.createToken(url, price, {
+        value: listingPrice,
+      });
+      try {
+        await transaction.wait();
+        console.log("Transaction mined");
+        navigate("/");
+      } catch (error) {
+        console.error("Transaction error:", error);
+      }
     } catch (error) {
-      console.error("Transaction error:", error);
+      console.error("Transaction Error:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -235,7 +237,14 @@ export const CreateNFT = () => {
           onClick={listNFTForSale}
           className="font-bold mt-4 bg-primary text-white rounded p-4 shadow-lg"
         >
-          Create NFT
+          {loading ? (
+            <div className="flex items-center justify-center gap-3">
+              <Audio color="white" height="20" width="20" />
+              <p>Minting NFT ..</p>
+            </div>
+          ) : (
+            "Create NFT"
+          )}
         </button>
       </div>
     </SectionWrapper>
