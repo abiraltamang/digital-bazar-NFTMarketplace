@@ -37,7 +37,7 @@ createWeb3Modal({
     defaultChainId: 11155111,
     enableEIP6963: true,
     enableInjected: enableMetaMask, // Enable MetaMask if available
-    enableCoinbase: false,
+    enableCoinbase: true,
   }),
   chains: [sepoliaTestnet],
   projectId: "8646805965d235cdc32fc551fec7dfdf4ba8315fbb664682256a0b89bd3c1de4",

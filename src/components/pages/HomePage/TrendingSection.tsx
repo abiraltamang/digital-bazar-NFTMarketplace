@@ -5,7 +5,7 @@ import Text from "../../common/Typography/Text";
 
 const trendingcards = [
   {
-    image: "/Monkey.png",
+    image: "/space.png",
     price: 5,
     title: "Funky Demi",
   },
@@ -15,12 +15,7 @@ const trendingcards = [
     title: "Funky Demi",
   },
   {
-    image: "/Monkey.png",
-    price: 5,
-    title: "Funky Demi",
-  },
-  {
-    image: "/banner.png",
+    image: "/space2.png",
     price: 5,
     title: "Funky Demi",
   },
@@ -30,17 +25,22 @@ const trendingcards = [
     title: "Funky Demi",
   },
   {
-    image: "/image1.png",
-    price: 5,
-    title: "Funky Demi",
-  },
-  {
-    image: "/Monekey.png",
+    image: "/space2.png",
     price: 5,
     title: "Funky Demi",
   },
   {
     image: "/image1.png",
+    price: 5,
+    title: "Funky Demi",
+  },
+  {
+    image: "/space2.png",
+    price: 5,
+    title: "Funky Demi",
+  },
+  {
+    image: "/nft.png",
     price: 5,
     title: "Funky Demi",
   },
@@ -75,7 +75,7 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-5 gap-4">
         {trendingcards.map((item, index) => (
           <TrendingCard
             key={index}
