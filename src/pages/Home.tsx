@@ -95,7 +95,11 @@ export default function Homepage() {
   return (
     <>
       <Banner />
-      <HotBidSection sectionText="🔥 Hot Bids" nfts={nfts} />
+      <HotBidSection
+        sectionText="🔥 Hot Bids"
+        nfts={nfts}
+        loadingState={loadingState}
+      />
       <TrendingSection customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
