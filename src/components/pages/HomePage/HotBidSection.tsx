@@ -1,6 +1,7 @@
 import HotBidCard from "../../common/Cards/HotBidCard";
 import SectionWrapper from "../../common/SectionWrapper";
 import Text from "../../common/Typography/Text";
+import { NFT } from "../../../pages/Home";
 
 const nfts = [
   {
@@ -30,10 +31,12 @@ const nfts = [
   },
 ];
 interface HotBidSectionProps {
-  sectionText?: string; // Optional prop for custom section text
+  sectionText?: string;
+  nfts: NFT[];
+  // Optional prop for custom section text
 }
 
-const HotBidSection: React.FC<HotBidSectionProps> = ({ sectionText }) => {
+const HotBidSection: React.FC<HotBidSectionProps> = ({ sectionText, nfts }) => {
   return (
     <SectionWrapper>
       {sectionText && (
@@ -50,7 +53,7 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({ sectionText }) => {
           <HotBidCard
             key={index}
             image={nft.image}
-            title={nft.title}
+            title={nft.name}
             price={nft.price}
           />
         ))}

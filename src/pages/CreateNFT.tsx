@@ -88,6 +88,7 @@ export const CreateNFT = () => {
         name,
         description,
         external_url,
+        price,
         image: fileUrl,
       },
       pinataMetadata: {
