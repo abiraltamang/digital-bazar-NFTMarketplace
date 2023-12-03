@@ -8,12 +8,19 @@ interface HotBidCardProps {
   price?: string;
 }
 
+const extractCIDFromImage = (image: string): string => {
+  const cidIndex = image.lastIndexOf("/");
+  return image.substring(cidIndex + 1);
+};
+
 const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
+  const cid = extractCIDFromImage(image);
+  const gatewayUrl = "https://tomato-main-landfowl-514.mypinata.cloud";
   return (
     <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3">
       <div className="w-full h-60 rounded-lg overflow-hidden">
         <img
-          src={image}
+          src={`${gatewayUrl}/ipfs/${cid}`}
           className="w-full h-full object-cover rounded-lg hover:scale-110 transition-all delay-50 ease-in-out"
           alt=""
         />
