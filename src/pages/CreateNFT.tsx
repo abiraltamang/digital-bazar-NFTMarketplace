@@ -130,6 +130,8 @@ export const CreateNFT = () => {
       const provider = new BrowserProvider(walletProvider);
       const signer = await provider.getSigner();
 
+      console.log("singer------", signer);
+
       const price = ethers.parseUnits(formInput.price, "ether");
       const contract = new ethers.Contract(
         marketplaceAddress,
