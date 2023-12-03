@@ -10,6 +10,9 @@ import Product from "./pages/Product";
 import Collection from "./pages/Collection";
 import { CreateNFT } from "./pages/CreateNFT";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
+import Explore from "./pages/Explore";
+import Signin from "./pages/Signin";
+import EditProfile from "./pages/EditProfile";
 
 // Set the Sepolia test network details
 const sepoliaTestnet = {
@@ -68,6 +71,18 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <CreateNFT />,
+      },
+      {
+        path: "/explore",
+        element: <Explore />,
+      },
+      {
+        path: "/signin",
+        element: <Signin />,
+      },
+      {
+        path: "/editprofile",
+        element: <EditProfile />,
       },
     ],
   },
