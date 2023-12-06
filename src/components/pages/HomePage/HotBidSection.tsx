@@ -6,9 +6,14 @@ import { NFT } from "../../../pages/Home";
 interface HotBidSectionProps {
   sectionText?: string;
   nfts: NFT[];
+  buyNFT: (nft: NFT) => void;
 }
 
-const HotBidSection: React.FC<HotBidSectionProps> = ({ sectionText, nfts }) => {
+const HotBidSection: React.FC<HotBidSectionProps> = ({
+  sectionText = "🔥 Hot Bids",
+  nfts,
+  buyNFT,
+}) => {
   return (
     <SectionWrapper>
       {sectionText && (
@@ -22,12 +27,7 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({ sectionText, nfts }) => {
       )}
       <div className="grid grid-cols-2 sm:grid-cols-2  md:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {nfts.map((nft, index: number) => (
-          <HotBidCard
-            key={index}
-            image={nft.image}
-            title={nft.name}
-            price={nft.price}
-          />
+          <HotBidCard key={index} nft={nft} buyNft={buyNFT} />
         ))}
       </div>
     </SectionWrapper>
