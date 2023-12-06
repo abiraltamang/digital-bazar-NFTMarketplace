@@ -35,9 +35,6 @@ const MyNFTs = () => {
       }
       const provider = new BrowserProvider(walletProvider);
       const signer = await provider.getSigner();
-
-      console.log("SIgner provided----", provider);
-
       const marketplaceContract = new ethers.Contract(
         marketplaceAddress,
         NFTMarketplace.abi,
