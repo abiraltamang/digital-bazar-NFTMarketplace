@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { BrowserProvider } from "ethers";
-import { Audio } from "react-loader-spinner";
+import LoadingSpinner from "../components/common/LoadingSpinner.tsx";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
@@ -159,6 +159,7 @@ export const CreateNFT = () => {
 
   return (
     <SectionWrapper>
+      {loading && <LoadingSpinner />}
       <div className="py-8">
         <Text className="text-center text-black/80" title weight="semibold">
           Create New NFT
@@ -242,7 +243,6 @@ export const CreateNFT = () => {
         >
           {loading ? (
             <div className="flex items-center justify-center gap-3">
-              <Audio color="white" height="20" width="20" />
               <p>Minting NFT ..</p>
             </div>
           ) : (
