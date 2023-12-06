@@ -1,17 +1,13 @@
 import Text from "../Typography/Text";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
+import { extractCIDFromImage } from "../../../utils";
 
 interface HotBidCardProps {
   image: string;
   title: string;
   price?: string;
 }
-
-const extractCIDFromImage = (image: string): string => {
-  const cidIndex = image.lastIndexOf("/");
-  return image.substring(cidIndex + 1);
-};
 
 const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
   const cid = extractCIDFromImage(image);

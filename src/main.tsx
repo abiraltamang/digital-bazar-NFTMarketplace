@@ -13,6 +13,7 @@ import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
 import Explore from "./pages/Explore";
 import Signin from "./pages/Signin";
 import EditProfile from "./pages/EditProfile";
+import MyNFTs from "./pages/MyNFTs";
 
 // Set the Sepolia test network details
 const sepoliaTestnet = {
@@ -20,7 +21,7 @@ const sepoliaTestnet = {
   name: "Sepolia Testnet",
   currency: "ETH",
   explorerUrl: "https://sepolia.etherscan.io/",
-  rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/",
+  rpcUrl: "https://sepolia.infura.io/v3/eb69522e52ba4c3babe2118a59a0b301",
 };
 
 // Create modal
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "/editprofile",
         element: <EditProfile />,
+      },
+      {
+        path: "/profile/my-nfts",
+        element: <MyNFTs />,
       },
     ],
   },

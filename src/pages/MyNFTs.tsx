@@ -1,21 +1,23 @@
-import ProfileCard from "../components/pages/ProfilePage/ProfileCard";
-import TabNavigation from "../components/pages/ProfilePage/TabNavigation";
-import TrendingSection from "../components/pages/HomePage/TrendingSection";
-import { useWeb3ModalProvider } from "@web3modal/ethers/react";
-import axios from "axios";
-import { BrowserProvider, ethers } from "ethers";
-import { useState, useEffect } from "react";
-import { NFT, MarketItem } from "./Home";
+import Text from "../components/common/Typography/Text";
 import SectionWrapper from "../components/common/SectionWrapper";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
+import { useWeb3ModalProvider } from "@web3modal/ethers/react";
+import { NFT } from "./Home";
+import { BrowserProvider } from "ethers";
+import Button from "../components/common/Button/Button.js";
+import { MarketItem } from "./Home";
 
 //@ts-expect-error config
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
-import NFTCard from "../components/common/Cards/NFTCard.js";
 
-const Profile = () => {
+const MyNFTs = () => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+  const navigate = useNavigate();
   const { walletProvider } = useWeb3ModalProvider();
 
   useEffect(() => {
@@ -33,13 +35,12 @@ const Profile = () => {
       }
       const provider = new BrowserProvider(walletProvider);
       const signer = await provider.getSigner();
-
       const marketplaceContract = new ethers.Contract(
         marketplaceAddress,
         NFTMarketplace.abi,
         signer
       );
-      const data = await marketplaceContract.fetchMarketItems();
+      const data = await marketplaceContract.fetchMyNFTs();
 
       // Fetch additional details for each item
       const items = await Promise.all(
@@ -83,27 +84,48 @@ const Profile = () => {
       console.log("Error loading my NFTs"), error;
     }
   }
-
-  const tabs = ["On Sale", "Owned", "Created", "Latest", "Collections"];
+  function listNFT(nft: NFT) {
+    console.log("nft:", nft);
+    navigate(`/resell-nft?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`);
+  }
   return (
     <SectionWrapper>
-      <ProfileCard
-        coverImage="/Cover image.png"
-        profileImage="/Profile.png"
-        name="Arbin Koirala"
-        address="0xb75ec484089cF6.....C0"
-        description={
-          " Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."
-        }
-      />
-      <TabNavigation tabs={tabs} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
-        {nfts.map((nft, i) => (
-          <NFTCard key={i} nft={nft} />
-        ))}
-      </div>
+      <Text className="text-center text-black/60 pb-8" title weight="semibold">
+        My NFTs
+      </Text>
+      {loadingState === "loaded" && !nfts.length ? (
+        <>
+          <Text className="text-center">No NFts owned</Text>
+          <div className="flex justify-center mt-6">
+            <Button primary rounded>
+              Explore NFTs
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            {nfts.map((nft, i) => (
+              <div key={i} className="border shadow rounded-xl overflow-hidden">
+                <img src={nft.image} className="rounded" />
+                <div className="p-4 bg-black">
+                  <p className="text-2xl font-bold text-white">
+                    Price - {nft.price} Eth
+                  </p>
+                  <button
+                    className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
+                    onClick={() => listNFT(nft)}
+                  >
+                    List
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </SectionWrapper>
   );
 };
 
-export default Profile;
+export default MyNFTs;

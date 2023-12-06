@@ -1,3 +1,5 @@
+import { extractCIDFromImage } from "../../../utils";
+
 type TrendingCardProps = {
   image: string;
   title: string;
@@ -5,6 +7,8 @@ type TrendingCardProps = {
 };
 
 const TrendingCard = ({ image, title, price }: TrendingCardProps) => {
+  const cid = extractCIDFromImage(image);
+  const gatewayUrl = "https://ipfs.io";
   return (
     <div className="relative max-w-xs h-72 rounded-2xl overflow-hidden ">
       <img

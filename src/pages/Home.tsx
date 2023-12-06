@@ -12,10 +12,19 @@ export interface NFT {
   tokenId: number;
   seller: string;
   owner: string;
-  price: string;
+  price: number;
   image: string;
   name: string;
   description: string;
+  tokenURI?: string;
+  sold?: boolean;
+}
+export interface MarketItem {
+  tokenId: number;
+  seller: string;
+  owner: string;
+  price: number;
+  sold: boolean;
 }
 
 //@ts-expect-error config
@@ -24,9 +33,9 @@ import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMark
 
 export default function Homepage() {
   const [nfts, setNfts] = useState<NFT[]>([]);
-  const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
-    "not-loaded"
-  );
+  // const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
+  //   "not-loaded"
+  // );
 
   useEffect(() => {
     loadNFTs();
@@ -51,7 +60,7 @@ export default function Homepage() {
 
       // Fetch additional details for each item
       const items = await Promise.all(
-        marketItems.map(async (item) => {
+        marketItems.map(async (item: MarketItem) => {
           const tokenUri = await contract.tokenURI(item.tokenId);
           let meta;
           if (tokenUri.startsWith("ipfs://")) {
@@ -86,7 +95,7 @@ export default function Homepage() {
 
       // Update the state with the fetched NFTs
       setNfts(items);
-      setLoadingState("loaded");
+      // setLoadingState("loaded");
     } catch (error) {
       console.error("Error loading NFTs:", error);
     }
@@ -95,11 +104,7 @@ export default function Homepage() {
   return (
     <>
       <Banner />
-      <HotBidSection
-        sectionText="🔥 Hot Bids"
-        nfts={nfts}
-        loadingState={loadingState}
-      />
+      <HotBidSection sectionText="🔥 Hot Bids" nfts={nfts} />
       <TrendingSection customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
