@@ -21,7 +21,7 @@ const sepoliaTestnet = {
   name: "Sepolia Testnet",
   currency: "ETH",
   explorerUrl: "https://sepolia.etherscan.io/",
-  rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/",
+  rpcUrl: "https://sepolia.infura.io/v3/eb69522e52ba4c3babe2118a59a0b301",
 };
 
 // Create modal
