@@ -12,7 +12,7 @@ const TrendingCard = ({ image, title, price }: TrendingCardProps) => {
   return (
     <div className="relative max-w-xs h-72 rounded-2xl overflow-hidden ">
       <img
-        src={`${gatewayUrl}/ipfs/${cid}`}
+        src={image}
         alt="YourImage"
         className="w-full h-full object-cover rounded-2xl"
       />

@@ -18,7 +18,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   return (
     <div className="w-full bg-[#212121] flex items-center justify-center mb-[80px]">
       <div className="w-full text-center bg-[#fff] text-[#333]">
-        <img src={coverImage} alt="cover" className="w-full h-[220px]" />
+        <img src={coverImage} alt="cover" className="w-full h-[120px]" />
         <img
           src={profileImage}
           alt="profilepic"
