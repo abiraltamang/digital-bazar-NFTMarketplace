@@ -15,7 +15,7 @@ const extractCIDFromImage = (image: string): string => {
 
 const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
   const cid = extractCIDFromImage(image);
-  const gatewayUrl = "https://tomato-main-landfowl-514.mypinata.cloud";
+  const gatewayUrl = "https://ipfs.io";
   return (
     <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3">
       <div className="w-full h-60 rounded-lg overflow-hidden">
