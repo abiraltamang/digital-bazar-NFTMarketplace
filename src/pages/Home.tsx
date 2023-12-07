@@ -110,6 +110,7 @@ export default function Homepage() {
   const { walletProvider } = useWeb3ModalProvider();
   const { isConnected } = useWeb3ModalAccount();
   const { open } = useWeb3Modal();
+
   async function buyNft(nft: NFT) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
 
@@ -120,11 +121,11 @@ export default function Homepage() {
       throw Error("Wallet provider is undefined");
     }
     const provider = new BrowserProvider(walletProvider);
-    // const signer = provider.getSigner();
+    const signer = await provider.getSigner();
     const contract = new ethers.Contract(
       marketplaceAddress,
       NFTMarketplace.abi,
-      provider
+      signer
     );
 
     /* user will be prompted to pay the asking proces to complete the transaction */
