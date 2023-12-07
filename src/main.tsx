@@ -87,7 +87,7 @@ const router = createBrowserRouter([
         element: <EditProfile />,
       },
       {
-        path: "/profile/my-nfts",
+        path: "/account/my-nfts",
         element: <MyNFTs />,
       },
       {

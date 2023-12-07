@@ -2,6 +2,7 @@ import Text from "../components/common/Typography/Text";
 import SectionWrapper from "../components/common/SectionWrapper";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Bars } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { useWeb3ModalProvider } from "@web3modal/ethers/react";
@@ -9,7 +10,6 @@ import { NFT } from "./Home";
 import { BrowserProvider } from "ethers";
 import Button from "../components/common/Button/Button.js";
 import { MarketItem } from "./Home";
-import { extractCIDFromImage } from "../utils";
 
 //@ts-expect-error config
 import { marketplaceAddress } from "../../config.js";
@@ -88,13 +88,29 @@ const MyNFTs = () => {
   }
   function listNFT(nft: NFT) {
     console.log("nft:", nft);
-    navigate(`/resell-nft?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`);
+    if (nft.tokenUri) {
+      navigate(`/resell-nft?id=${nft.tokenId}&tokenURI=${nft.tokenUri}`);
+    }
   }
   return (
     <SectionWrapper>
       <Text className="text-center text-black/60 pb-8" title weight="semibold">
         My NFTs
       </Text>
+      {loadingState == "not-loaded" && (
+        <div className="flex justify-center items-center gap-4 ">
+          <Bars
+            height="30"
+            width="30 "
+            color="#00008b"
+            ariaLabel="bars-loading"
+            visible={true}
+          />
+          <Text weight="semibold" className="text-center text-black/60">
+            NFTs are loading
+          </Text>
+        </div>
+      )}
       {loadingState === "loaded" && !nfts.length ? (
         <>
           <Text className="text-center">No NFts owned</Text>
@@ -109,20 +125,6 @@ const MyNFTs = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
             {nfts.map((nft, i) => (
               <MyNFT key={i} nft={nft} listNFT={listNFT} />
-              // <div key={i} className="border shadow rounded-xl overflow-hidden">
-              //   <img src={nft.image} className="rounded" />
-              //   <div className="p-4 bg-black">
-              //     <p className="text-2xl font-bold text-white">
-              //       Price - {nft.price} Eth
-              //     </p>
-              //     <button
-              //       className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
-              //       onClick={() => listNFT(nft)}
-              //     >
-              //       List
-              //     </button>
-              //   </div>
-              // </div>
             ))}
           </div>
         </div>
