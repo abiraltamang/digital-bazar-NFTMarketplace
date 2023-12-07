@@ -15,7 +15,7 @@ import {
 } from "@web3modal/ethers/react";
 
 export interface NFT {
-  tokenId: number;
+  tokenId: string;
   seller: string;
   owner: string;
   price: number;
@@ -39,9 +39,9 @@ import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMark
 
 export default function Homepage() {
   const [nfts, setNfts] = useState<NFT[]>([]);
-  // const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
-  //   "not-loaded"
-  // );
+  const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
+    "not-loaded"
+  );
 
   useEffect(() => {
     loadNFTs();
@@ -101,7 +101,7 @@ export default function Homepage() {
 
       // Update the state with the fetched NFTs
       setNfts(items);
-      // setLoadingState("loaded");
+      setLoadingState("loaded");
     } catch (error) {
       console.error("Error loading NFTs:", error);
     }
@@ -138,7 +138,7 @@ export default function Homepage() {
   return (
     <>
       <Banner />
-      <HotBidSection nfts={nfts} buyNFT={buyNft} />
+      <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
       <TrendingSection customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
