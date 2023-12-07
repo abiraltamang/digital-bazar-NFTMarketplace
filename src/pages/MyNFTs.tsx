@@ -9,10 +9,12 @@ import { NFT } from "./Home";
 import { BrowserProvider } from "ethers";
 import Button from "../components/common/Button/Button.js";
 import { MarketItem } from "./Home";
+import { extractCIDFromImage } from "../utils";
 
 //@ts-expect-error config
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
+import MyNFT from "../components/common/Cards/MyNFT.js";
 
 const MyNFTs = () => {
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -106,20 +108,21 @@ const MyNFTs = () => {
         <div className="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
             {nfts.map((nft, i) => (
-              <div key={i} className="border shadow rounded-xl overflow-hidden">
-                <img src={nft.image} className="rounded" />
-                <div className="p-4 bg-black">
-                  <p className="text-2xl font-bold text-white">
-                    Price - {nft.price} Eth
-                  </p>
-                  <button
-                    className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
-                    onClick={() => listNFT(nft)}
-                  >
-                    List
-                  </button>
-                </div>
-              </div>
+              <MyNFT key={i} nft={nft} listNFT={listNFT} />
+              // <div key={i} className="border shadow rounded-xl overflow-hidden">
+              //   <img src={nft.image} className="rounded" />
+              //   <div className="p-4 bg-black">
+              //     <p className="text-2xl font-bold text-white">
+              //       Price - {nft.price} Eth
+              //     </p>
+              //     <button
+              //       className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
+              //       onClick={() => listNFT(nft)}
+              //     >
+              //       List
+              //     </button>
+              //   </div>
+              // </div>
             ))}
           </div>
         </div>

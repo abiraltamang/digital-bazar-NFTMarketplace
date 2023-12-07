@@ -1,15 +1,15 @@
 import Text from "../Typography/Text";
 import Button from "../Button/Button";
-import { Link } from "react-router-dom";
 import { extractCIDFromImage } from "../../../utils";
+import { NFT } from "../../../pages/Home";
 
 interface HotBidCardProps {
-  image: string;
-  title: string;
-  price?: string;
+  nft: NFT;
+  buyNft: (nft: NFT) => void;
 }
 
-const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
+const HotBidCard = ({ nft, buyNft }: HotBidCardProps) => {
+  const { image, name, price } = nft;
   const cid = extractCIDFromImage(image);
   const gatewayUrl = "https://ipfs.io";
   return (
@@ -21,17 +21,24 @@ const HotBidCard = ({ image, title, price }: HotBidCardProps) => {
           alt=""
         />
       </div>
-      <div className="flex items-start justify-between ">
+      <div className="flex items-center justify-between ">
         <div>
-          <Text weight="semibold">{title}</Text>
+          <Text weight="semibold">{name}</Text>
         </div>
-        <Button size="small">{price}</Button>
+        <Text
+          className="px-2 py-1 border-2 border-gray-200 rounded-xl text-green-700"
+          detail
+        >
+          {price} <span className="font-bold text-black pl-1">ETH</span>
+        </Text>
       </div>
-      <Link to="/products/:id">
-        <div>
-          <Text>Buy Now</Text>
-        </div>
-      </Link>
+      <Button
+        className="hover:bg-primar/10"
+        size="small"
+        onClick={() => buyNft(nft)}
+      >
+        <Text>Buy Now</Text>
+      </Button>
     </div>
   );
 };

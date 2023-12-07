@@ -6,10 +6,16 @@ import HowItWorks from "../components/pages/HomePage/HowItWorks";
 import TrendingSection from "../components/pages/HomePage/TrendingSection";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { BrowserProvider } from "ethers";
 import * as ethers from "ethers";
+import {
+  useWeb3ModalProvider,
+  useWeb3ModalAccount,
+  useWeb3Modal,
+} from "@web3modal/ethers/react";
 
 export interface NFT {
-  tokenId: number;
+  tokenId: string;
   seller: string;
   owner: string;
   price: number;
@@ -33,9 +39,9 @@ import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMark
 
 export default function Homepage() {
   const [nfts, setNfts] = useState<NFT[]>([]);
-  // const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
-  //   "not-loaded"
-  // );
+  const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
+    "not-loaded"
+  );
 
   useEffect(() => {
     loadNFTs();
@@ -95,16 +101,45 @@ export default function Homepage() {
 
       // Update the state with the fetched NFTs
       setNfts(items);
-      // setLoadingState("loaded");
+      setLoadingState("loaded");
     } catch (error) {
       console.error("Error loading NFTs:", error);
     }
   }
 
+  const { walletProvider } = useWeb3ModalProvider();
+  const { isConnected } = useWeb3ModalAccount();
+  const { open } = useWeb3Modal();
+
+  async function buyNft(nft: NFT) {
+    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+
+    if (!isConnected) {
+      open();
+    }
+    if (!walletProvider) {
+      throw Error("Wallet provider is undefined");
+    }
+    const provider = new BrowserProvider(walletProvider);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(
+      marketplaceAddress,
+      NFTMarketplace.abi,
+      signer
+    );
+
+    /* user will be prompted to pay the asking proces to complete the transaction */
+    const price = ethers.parseUnits(nft.price.toString(), "ether");
+    const transaction = await contract.createMarketSale(nft.tokenId, {
+      value: price,
+    });
+    await transaction.wait();
+    loadNFTs();
+  }
   return (
     <>
       <Banner />
-      <HotBidSection sectionText="🔥 Hot Bids" nfts={nfts} />
+      <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
       <TrendingSection customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />

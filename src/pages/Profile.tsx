@@ -39,7 +39,7 @@ const Profile = () => {
         NFTMarketplace.abi,
         signer
       );
-      const data = await marketplaceContract.fetchMarketItems();
+      const data = await marketplaceContract.fetchItemsListed();
 
       // Fetch additional details for each item
       const items = await Promise.all(
