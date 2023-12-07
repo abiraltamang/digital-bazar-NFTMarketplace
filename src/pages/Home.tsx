@@ -22,7 +22,7 @@ export interface NFT {
   image: string;
   name: string;
   description: string;
-  tokenURI?: string;
+  tokenUri?: string;
   sold?: boolean;
 }
 export interface MarketItem {
