@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom"
 const Footer = () => {
   return (
     <div className="bg-primary text-white">
@@ -6,7 +7,7 @@ const Footer = () => {
           <div>
             <div className="pb-5">
               <p className="font-light">
-               NFT Marketplace
+               NFTS Marketplace
               </p>
             </div>
             <div className="grid grid-flow-col gap-2">
@@ -25,7 +26,9 @@ const Footer = () => {
               <li>Author Profile</li>
               <li>NFT Details</li>
               <li>Account Setting</li>
-              <li>Upload NFT</li>
+              <Link to="/create">
+                <li>Upload NFT</li>
+              </Link>
               <li>Connect Wallet</li>
               <li>Blog</li>
             </ul>
