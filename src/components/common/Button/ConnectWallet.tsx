@@ -2,6 +2,7 @@ import { useWeb3Modal } from "@web3modal/ethers/react";
 import { useWeb3ModalAccount, useDisconnect } from "@web3modal/ethers/react";
 import { useState, useEffect, useRef } from "react";
 import { TbLogout } from "react-icons/tb";
+import { RiFileCopy2Line } from "react-icons/ri";
 
 export default function ConnectButton() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -40,6 +41,9 @@ export default function ConnectButton() {
     setDrawerOpen(false);
   };
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(address || "");
+  };
   return (
     <>
       {!isConnected ? (
@@ -52,10 +56,14 @@ export default function ConnectButton() {
       ) : (
         <div className="relative" ref={disconnectRef}>
           <button
-            className="border-[1px] border-secondary px-2 py-1 text-secondary rounded-lg"
+            className="border-[1px] border-secondary px-2 py-1 text-secondary rounded-lg flex items-center"
             onClick={() => setDrawerOpen(!isDrawerOpen)}
           >
             {shortenAddress(address || "")}
+            <RiFileCopy2Line
+              onClick={handleCopyToClipboard}
+              className="ml-1 cursor-pointer"
+            />
           </button>
           {isDrawerOpen && (
             <div className="absolute top-9 left-0 bg-white rounded-lg p-2 hover:bg-gray-300">
