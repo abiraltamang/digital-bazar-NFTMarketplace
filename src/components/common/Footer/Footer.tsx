@@ -6,9 +6,7 @@ const Footer = () => {
           <div>
             <div className="pb-5">
               <p className="font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                modi dicta doloremque deleniti accusantium, sequi, illum
-                aspernatur
+               NFT Marketplace
               </p>
             </div>
             <div className="grid grid-flow-col gap-2">
