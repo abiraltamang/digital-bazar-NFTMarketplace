@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/product",
+        path: "/product/:tokenId",
         element: <Product />,
       },
       {
