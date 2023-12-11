@@ -72,7 +72,7 @@ export const CreateNFT = () => {
           },
         }
       );
-      const url = `ipfs://${res.data.IpfsHash}`;
+      const url = `https://ifps.io/ipfs/${res.data.IpfsHash}`;
       setFileUrl(url);
     } catch (error) {
       console.log("Error uploading file to IPFS:", error);
