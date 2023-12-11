@@ -36,6 +36,7 @@ export interface MarketItem {
 //@ts-expect-error config
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
+import Preloader from "../components/common/Preloader.js";
 
 export default function Homepage() {
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -92,6 +93,7 @@ export default function Homepage() {
             image: meta.data.image,
             name: meta.data.name,
             description: meta.data.description,
+            tokenUri,
           };
 
           return formattedItem;

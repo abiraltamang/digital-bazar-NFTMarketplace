@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { BrowserProvider } from "ethers";
 import LoadingSpinner from "../components/common/LoadingSpinner.tsx";
+import { FiUpload } from "react-icons/fi";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
@@ -39,6 +40,22 @@ export const CreateNFT = () => {
       previewFile(file);
     }
   };
+
+  //@ts-expect-error event
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      fileToIPFS(file);
+      previewFile(file);
+    }
+  };
+
+  //@ts-expect-error event
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   const previewFile = (file: Blob) => {
     const reader = new FileReader();
 
@@ -72,7 +89,7 @@ export const CreateNFT = () => {
           },
         }
       );
-      const url = `ipfs://${res.data.IpfsHash}`;
+      const url = `https://ifps.io/ipfs/${res.data.IpfsHash}`;
       setFileUrl(url);
     } catch (error) {
       console.log("Error uploading file to IPFS:", error);
@@ -183,7 +200,7 @@ export const CreateNFT = () => {
             }
           />
         </div>
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label htmlFor="file" className="font-semibold text-primary">
             Image
           </label>
@@ -193,6 +210,27 @@ export const CreateNFT = () => {
             className="my-4"
             onChange={handleFileChange}
           />
+        </div> */}
+        <div className="flex flex-col">
+          <label htmlFor="file" className="font-semibold text-primary">
+            Image
+          </label>
+          <div
+            className="my-4 border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+            onClick={() => document.getElementById("file-input").click()}
+          >
+            <input
+              type="file"
+              id="file-input"
+              name="Asset"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <div className="flex items-center flex-col gap-4">
+              <FiUpload size="60" className="text-primary/80 " />
+              Drag and drop your file here, or click to select a file.
+            </div>
+          </div>
         </div>
         {fileUrl && (
           <img alt="" className="rounded mt-4 w-32 h-32" src={fileUrl} />

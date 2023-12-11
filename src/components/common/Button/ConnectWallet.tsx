@@ -3,6 +3,7 @@ import { useWeb3ModalAccount, useDisconnect } from "@web3modal/ethers/react";
 import { useState, useEffect, useRef } from "react";
 import { TbLogout } from "react-icons/tb";
 import { RiFileCopy2Line } from "react-icons/ri";
+import { shortenAddress } from "../../../utils";
 
 export default function ConnectButton() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -11,14 +12,6 @@ export default function ConnectButton() {
   const { address, isConnected } = useWeb3ModalAccount();
   const { open } = useWeb3Modal();
   const { disconnect } = useDisconnect();
-
-  //for shortening the wallet address
-  const shortenAddress = (address: string): string => {
-    if (!address) return "";
-    const start = address.substring(0, 6);
-    const end = address.substring(address.length - 4);
-    return `${start}...${end}`;
-  };
 
   //for closing the disconnect button, when clicked outside of it
   useEffect(() => {
