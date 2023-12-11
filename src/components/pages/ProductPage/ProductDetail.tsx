@@ -1,40 +1,49 @@
 import Text from "../../common/Typography/Text";
 import Button from "../../common/Button/Button";
 import { NFT } from "../../../pages/Home";
-// import { extractCIDFromImage } from "../../../utils/index";
+import { extractCIDFromImage } from "../../../utils/index";
+import { shortenAddress } from "../../../utils/index";
 
 interface ProductDetailProps {
   nft: NFT;
+  buyNFT: (nft: NFT) => void;
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
   nft,
+  buyNFT,
 }: ProductDetailProps) => {
-  const { image, name, description, price } = nft;
-  // const CID = extractCIDFromImage(image);
+  const { image, name, description, price, owner } = nft;
+  const CID = extractCIDFromImage(image);
+
   return (
-    <div className="flex pt-[103px] mb-[113px]">
-      <img
-        // src={`https://ipfs.io/ipfs/${CID}`}
-        src={image}
-        alt="product image"
-        className="pl-[150px] w-[480px] h-[450px]"
-      />
-      <div className="pl-[48px]">
-        <Text title weight="semibold">
+    <div className="grid py-24 px-40 grid-cols-2 gap-6 rounded-xl">
+      <div className="w-full h-ful hover:shadow-lg hover:shadow-gray-700 tansition-all ease-in-out duration-300 hover:cursor-pointer">
+        <img
+          src={`https://ipfs.io/ipfs/${CID}`}
+          alt="product image"
+          className="rounded-xl w-full h-full"
+        />
+      </div>
+      <div className="pt-7 flex flex-col justify-center gap-4">
+        <Text title weight="semibold" className="text-primary/90">
           {name}
         </Text>
-        <Text title weight="bold">
+        <p className="text-sm text-slate-700">
+          by{" "}
+          <span className="p-1 border-[1px] border-zinc-500 rounded-lg ">
+            {shortenAddress(owner)}
+          </span>
+        </p>
+        <Text subtitle weight="medium" className="text-black/50">
           {description}
         </Text>
-        <div className="space-x-[12px]">
-          <Button primary size="small" rounded>
-            {price}
-          </Button>
-          <Button primary size="small" rounded>
-            {price}
-          </Button>
-        </div>
+        <Button secondary className="bg-primary/80 text-black">
+          {price} ETH
+        </Button>
+        <Button primary onClick={() => buyNFT(nft)}>
+          Buy Now
+        </Button>
       </div>
     </div>
   );
