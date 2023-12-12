@@ -2,6 +2,7 @@ import {Link} from "react-router-dom"
 import { FaFacebook } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
+import Logo from "../Logo/Logo";
 
 
 const Footer = () => {
@@ -11,8 +12,9 @@ const Footer = () => {
         <div className="grid grid-cols-4 gap-4 pt-[40px] pb-10">
           <div>
             <div className="pb-5">
-              <p className="font-light">
-               <b> The World Largest Marketplace For Digital Assets</b>
+              <Logo medium />
+              <p className="text-sm ">
+               The World Largest Marketplace <br /> For Digital Assets
               </p>
             </div>
             <div className="flex gap-2">
@@ -24,22 +26,22 @@ const Footer = () => {
           <div>
             <h4 className="font-bold pb-3">Discover</h4>
             <ul className="font-light">
-              <Link to="/collection">
-              <li>Collection</li>
-              </Link>
+              <Link to ="/search">
               <li>Search</li>
+              </Link>
+              <Link to ="/account">
               <li>Author Profile</li>
+              </Link>
               <Link to ="/explore">
-              <li>NFT Details</li>
+              <li>Explore</li>
               </Link>
               <Link to="/create">
-              <li>Account Setting</li>
+              <li>Create</li>
               </Link>
-              <Link to="/create">
-                <li>Upload NFT</li>
+              <Link to="/account/my-nfts">
+                <li>Sell</li>
               </Link>
-              <li>Connect Wallet</li>
-              <li>Blog</li>
+              
             </ul>
           </div>
           <div>
@@ -59,7 +61,7 @@ const Footer = () => {
               placeholder="Enter your email*"
               className="px-2 py-2 pl-10 rounded-3xl border-none focus:outline-none  text-gray-800 pb-2"
             />
-            <p className="pt-4 font-light">Blah Blah Blah Blah</p>
+            <p className="pt-4 font-light"></p>
           </div>
         </div>
       </div>
