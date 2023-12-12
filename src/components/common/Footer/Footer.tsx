@@ -1,4 +1,9 @@
 import {Link} from "react-router-dom"
+import { FaFacebook } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+
+
 const Footer = () => {
   return (
     <div className="bg-primary text-white">
@@ -7,25 +12,29 @@ const Footer = () => {
           <div>
             <div className="pb-5">
               <p className="font-light">
-               NFTS Marketplace
+               <b> The World Largest Marketplace For Digital Assets</b>
               </p>
             </div>
-            <div className="grid grid-flow-col gap-2">
-              <img src="/facebook.png" alt="facebook-icon" className="w-5" />
-              <img src="/linkedin.png" alt="linkedin-icon" className="w-5" />
-              <img src="/twitter.png" alt="twitter-icon" className="w-5" />
-              <img src="/youtube.png" alt="youtube-icon" className="w-5" />
-              <img src="/instagram.png" alt="instagram-icon" className="w-5" />
+            <div className="flex gap-2">
+              <FaFacebook />
+              <FaInstagram />
+              <FaTwitter/>
             </div>
           </div>
           <div>
             <h4 className="font-bold pb-3">Discover</h4>
             <ul className="font-light">
+              <Link to="/collection">
               <li>Collection</li>
+              </Link>
               <li>Search</li>
               <li>Author Profile</li>
+              <Link to ="/explore">
               <li>NFT Details</li>
+              </Link>
+              <Link to="/create">
               <li>Account Setting</li>
+              </Link>
               <Link to="/create">
                 <li>Upload NFT</li>
               </Link>
