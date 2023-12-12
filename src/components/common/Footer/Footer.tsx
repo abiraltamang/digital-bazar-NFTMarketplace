@@ -1,3 +1,10 @@
+import {Link} from "react-router-dom"
+import { FaFacebook } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import Logo from "../Logo/Logo";
+
+
 const Footer = () => {
   return (
     <div className="bg-primary text-white">
@@ -5,31 +12,36 @@ const Footer = () => {
         <div className="grid grid-cols-4 gap-4 pt-[40px] pb-10">
           <div>
             <div className="pb-5">
-              <p className="font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                modi dicta doloremque deleniti accusantium, sequi, illum
-                aspernatur
+              <Logo medium />
+              <p className="text-sm ">
+               The World Largest Marketplace <br /> For Digital Assets
               </p>
             </div>
-            <div className="grid grid-flow-col gap-2">
-              <img src="/facebook.png" alt="facebook-icon" className="w-5" />
-              <img src="/linkedin.png" alt="linkedin-icon" className="w-5" />
-              <img src="/twitter.png" alt="twitter-icon" className="w-5" />
-              <img src="/youtube.png" alt="youtube-icon" className="w-5" />
-              <img src="/instagram.png" alt="instagram-icon" className="w-5" />
+            <div className="flex gap-2">
+              <FaFacebook />
+              <FaInstagram />
+              <FaTwitter/>
             </div>
           </div>
           <div>
             <h4 className="font-bold pb-3">Discover</h4>
             <ul className="font-light">
-              <li>Collection</li>
+              <Link to ="/search">
               <li>Search</li>
+              </Link>
+              <Link to ="/account">
               <li>Author Profile</li>
-              <li>NFT Details</li>
-              <li>Account Setting</li>
-              <li>Upload NFT</li>
-              <li>Connect Wallet</li>
-              <li>Blog</li>
+              </Link>
+              <Link to ="/explore">
+              <li>Explore</li>
+              </Link>
+              <Link to="/create">
+              <li>Create</li>
+              </Link>
+              <Link to="/account/my-nfts">
+                <li>Sell</li>
+              </Link>
+              
             </ul>
           </div>
           <div>
@@ -49,7 +61,7 @@ const Footer = () => {
               placeholder="Enter your email*"
               className="px-2 py-2 pl-10 rounded-3xl border-none focus:outline-none  text-gray-800 pb-2"
             />
-            <p className="pt-4 font-light">Blah Blah Blah Blah</p>
+            <p className="pt-4 font-light"></p>
           </div>
         </div>
       </div>
