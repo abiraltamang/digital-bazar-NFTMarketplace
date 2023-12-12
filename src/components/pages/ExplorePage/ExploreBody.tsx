@@ -1,14 +1,16 @@
-import HotBidSection from "../HomePage/HotBidSection";
-import Text from "../../common/Typography/Text";
 import { NFT, MarketItem } from "../../../pages/Home";
 import axios from "axios";
+import HotBidCard from "../../common/Cards/HotBidCard.js";
 import * as ethers from "ethers";
 import { BrowserProvider } from "ethers";
+import { FallingLines } from "react-loader-spinner";
+import Text from "../../common/Typography/Text";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
   useWeb3Modal,
 } from "@web3modal/ethers/react";
+import Dropdown from "./ExploreDropdown.js";
 
 //@ts-expect-error config
 import { marketplaceAddress } from "../../../../config.js";
@@ -20,10 +22,11 @@ const ExploreBody = () => {
   const [loadingState, setLoadingState] = useState<"loaded" | "not-loaded">(
     "not-loaded"
   );
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
   useEffect(() => {
     loadNFTs();
-  }, []);
+  }, [selectedOption]);
 
   async function loadNFTs() {
     try {
@@ -75,10 +78,28 @@ const ExploreBody = () => {
           return formattedItem;
         })
       );
+
+      // Sort or filter the items based on the selected option
+      let sortedNFTs = [...items];
+      if (selectedOption === "price-low-to-high") {
+        sortedNFTs = sortedNFTs.sort(
+          (a, b) => parseFloat(a.price) - parseFloat(b.price)
+        );
+      } else if (selectedOption === "price-high-to-low") {
+        sortedNFTs = sortedNFTs.sort(
+          (a, b) => parseFloat(b.price) - parseFloat(a.price)
+        );
+      } else if (selectedOption === "latest") {
+        sortedNFTs = sortedNFTs.sort(
+          (a, b) => Number(b.tokenId) - Number(a.tokenId)
+        );
+        // Add sorting logic for the latest
+        // Example: sortedNFTs = sortedNFTs.sort((a, b) => a.createdAt - b.createdAt);
+      }
       console.log(items);
 
       // Update the state with the fetched NFTs
-      setNfts(items);
+      setNfts(sortedNFTs);
       setLoadingState("loaded");
     } catch (error) {
       console.error("Error loading NFTs:", error);
@@ -114,18 +135,25 @@ const ExploreBody = () => {
     await transaction.wait();
     loadNFTs();
   }
+  if (loadingState == "not-loaded")
+    return (
+      <div className="h-[50vh] w-full flex justify-center items-center">
+        <FallingLines color="#002F5B" width="80" visible={true} />
+      </div>
+    );
   return (
     <div>
-      <div className="px-7 text-[#5F5858]">
-        <Text title weight="bold">
-          Explore Collections
+      <div className="flex justify-between mb-7 ">
+        <Text weight="semibold" className="text-black/70">
+          Showing {nfts.length} items{" "}
         </Text>
-        <Text detail weight="bold">
-          10000 items
-        </Text>
+        <Dropdown onSelectOption={setSelectedOption} />
       </div>
-
-      <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
+      <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 gap-5">
+        {nfts.map((nft, index: number) => (
+          <HotBidCard key={index} nft={nft} buyNft={() => buyNft(nft)} />
+        ))}
+      </div>
     </div>
   );
 };

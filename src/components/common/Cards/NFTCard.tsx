@@ -1,6 +1,7 @@
 import { NFT } from "../../../pages/Home";
 import { extractCIDFromImage } from "../../../utils";
 import Text from "../Typography/Text";
+import { useNavigate } from "react-router-dom";
 
 type NFTCardProps = {
   nft: NFT;
@@ -8,11 +9,17 @@ type NFTCardProps = {
 
 const NFTCard = ({ nft }: NFTCardProps) => {
   const { image, name, price } = nft;
+  const navigate = useNavigate();
   const cid = extractCIDFromImage(image);
   const gatewayUrl = "https://ipfs.io";
 
   return (
-    <div className="relative max-w-xs h-72 rounded-2xl overflow-hidden  transition-opacity group">
+    <div
+      className="relative max-w-xs h-72 rounded-2xl overflow-hidden  transition-opacity group"
+      onClick={() => {
+        navigate(`/product/${nft.tokenId}`);
+      }}
+    >
       <img
         src={`${gatewayUrl}/ipfs/${cid}`}
         alt="YourImage"

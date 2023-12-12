@@ -21,7 +21,7 @@ const HowItWorks = () => {
   return (
     <div className="items-center flex flex-col gap-9 pb-9 ">
       <Text className="text-center text-black/60 pb-6" title weight="semibold">
-        Create and sell your NFTs
+        How it works ?
       </Text>
       <div className="cursor-pointer flex flex-wrap justify-center gap-10  xl:gap-[84px] px-[4%] lg:px-0">
         {sellNft.map((data, index) => {

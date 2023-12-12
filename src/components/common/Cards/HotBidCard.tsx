@@ -16,7 +16,7 @@ const HotBidCard = ({ nft, buyNft }: HotBidCardProps) => {
   const navigate = useNavigate();
   console.log(nft.tokenUri);
   return (
-    <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3">
+    <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3 hover:shadow-lg hover:shadow-slate-300 transition-none ease-in-out delay-500">
       <div
         onClick={() => {
           navigate(`/product/${nft.tokenId}`);
@@ -42,7 +42,7 @@ const HotBidCard = ({ nft, buyNft }: HotBidCardProps) => {
         </div>
       </div>
       <Button
-        className="hover:bg-primar/10"
+        className="hover:bg-primary/80 bg-primary/90 text-white"
         size="small"
         onClick={() => buyNft(nft)}
       >

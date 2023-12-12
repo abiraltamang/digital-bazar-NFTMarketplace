@@ -134,8 +134,8 @@ const Profile = () => {
     <div className="pt-0 ">
       <ProfileCard
         walletAddress={address}
-        coverImage="/Cover image.png"
-        profileImage="/Profile.png"
+        coverImage="/image1.png"
+        profileImage="/profile.jpeg"
         name="Arbin Koirala"
         description={
           " Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."

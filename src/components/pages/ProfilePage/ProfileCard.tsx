@@ -14,24 +14,29 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   walletAddress,
   coverImage,
   profileImage,
-  name,
   description,
 }) => {
   return (
     <div className="w-full pb-4">
       <div className="w-full text-center text-[#333]">
-        <img src={coverImage} alt="cover" className="w-full h-[120px]" />
+        <div className="w-full h-[120px]">
+          <img
+            src={coverImage}
+            alt="cover"
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
         <img
           src={profileImage}
           alt="profilepic"
-          className="w-[150px] border-r-[50%] mx-auto my-auto mt-[-95px]"
+          className="w-[150px] border-r-[50%] mx-auto my-auto mt-[-95px] rounded-lg"
         />
 
-        <h1 className="text-[24px] font-bold pt-[17px]">@{name}</h1>
+        <h1 className="text-[24px] font-bold pt-[17px]">@DigitalDabbler</h1>
 
         <div className=" flex items-center justify-center">
           <Text className="px-3 py-1 bg-primary/90 text-white w-[150px] rounded-xl">
-            {shortenAddress(walletAddress)}
+            {shortenAddress(walletAddress || "")}
           </Text>
         </div>
         <Text weight="semibold" className="text-[#5F5858] pt-3 ">
