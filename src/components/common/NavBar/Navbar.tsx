@@ -92,6 +92,19 @@ const Navbar = () => {
             >
               <Text weight="bold">Create</Text>
             </Link>
+            <Link
+              to={"/account/my-nfts"}
+              className={classNames(
+                "font-bold hover:text-gray-500 whitespace-nowrap pb-2",
+                {
+                  "text-white/80 ": location?.pathname !== "/account/my-nfts",
+                  "text-white border-primary":
+                    location?.pathname == "/account/my-nfts",
+                }
+              )}
+            >
+              <Text weight="bold">Sell</Text>
+            </Link>
           </div>
           <ConnectWallet />
           <Link to="/account">
