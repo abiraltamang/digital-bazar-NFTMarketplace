@@ -1,6 +1,6 @@
+import { Link } from "react-router-dom";
 import Button from "../../common/Button/Button";
 import Text from "../../common/Typography/Text";
-import { Link } from "react-router-dom";
 
 const Banner = () => {
   return (

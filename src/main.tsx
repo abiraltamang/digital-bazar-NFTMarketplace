@@ -15,6 +15,11 @@ import Signin from "./pages/Signin";
 import EditProfile from "./pages/EditProfile";
 import MyNFTs from "./pages/MyNFTs";
 import ResellNFT from "./pages/ResellNFT";
+import HelpCenter from "./pages/HelpCenter";
+import GettingStarted from "./components/pages/HelpCenter/GettingStarted";
+import Buying from "./components/pages/HelpCenter/Buying";
+import Creating from "./components/pages/HelpCenter/Creating";
+import Selling from "./components/pages/HelpCenter/Selling";
 import SearchPage from "./pages/SearchPage";
 
 // Set the Sepolia test network details
@@ -94,6 +99,26 @@ const router = createBrowserRouter([
       {
         path: "/resell-nft",
         element: <ResellNFT />,
+      },
+      {
+        path: "/help",
+        element: <HelpCenter />,
+      },
+      {
+        path: "/help/gettingstarted",
+        element: <GettingStarted />,
+      },
+      {
+        path: "/help/buying",
+        element: <Buying />,
+      },
+      {
+        path: "/help/creating",
+        element: <Creating />,
+      },
+      {
+        path: "/help/selling",
+        element: <Selling />,
       },
       {
         path: "/search",

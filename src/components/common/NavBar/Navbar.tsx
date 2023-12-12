@@ -105,6 +105,18 @@ const Navbar = () => {
             >
               <Text weight="bold">Sell</Text>
             </Link>
+            <Link
+              to={"/help"}
+              className={classNames(
+                "font-bold hover:text-gray-500 whitespace-nowrap pb-2",
+                {
+                  "text-white/80 ": location?.pathname !== "/help",
+                  "text-white border-primary": location?.pathname == "/help",
+                }
+              )}
+            >
+              <Text weight="bold">Help</Text>
+            </Link>
           </div>
           <ConnectWallet />
           <Link to="/account">
