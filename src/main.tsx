@@ -109,15 +109,15 @@ const router = createBrowserRouter([
         element: <GettingStarted />,
       },
       {
-        path: "/help/buying",
+        path: "/help/buy",
         element: <Buying />,
       },
       {
-        path: "/help/creating",
+        path: "/help/create",
         element: <Creating />,
       },
       {
-        path: "/help/selling",
+        path: "/help/sell",
         element: <Selling />,
       },
       {
