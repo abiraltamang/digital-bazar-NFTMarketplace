@@ -5,7 +5,11 @@ import axios from "axios";
 import { Bars } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
-import { useWeb3ModalProvider } from "@web3modal/ethers/react";
+import {
+  useWeb3ModalProvider,
+  useWeb3Modal,
+  useWeb3ModalAccount,
+} from "@web3modal/ethers/react";
 import { NFT } from "./Home";
 import { BrowserProvider } from "ethers";
 import Button from "../components/common/Button/Button.js";
@@ -21,8 +25,13 @@ const MyNFTs = () => {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const navigate = useNavigate();
   const { walletProvider } = useWeb3ModalProvider();
+  const { isConnected } = useWeb3ModalAccount();
+  const { open } = useWeb3Modal();
 
   useEffect(() => {
+    if (!isConnected) {
+      open();
+    }
     // Check if walletProvider is available
     if (walletProvider) {
       // Wallet provider is available, proceed with loading NFTs
