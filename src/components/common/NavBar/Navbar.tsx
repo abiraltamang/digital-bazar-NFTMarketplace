@@ -7,10 +7,13 @@ import classNames from "classnames";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { MdLocalGroceryStore } from "react-icons/md";
 import ConnectWallet from "../Button/ConnectWallet";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll: EventListenerOrEventListenerObject = () => {
@@ -21,6 +24,11 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  //@ts-expect-error event
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+  };
   return (
     <div
       className={classNames(
@@ -33,14 +41,18 @@ const Navbar = () => {
       <nav className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Logo />
-          <div className="bg-slate-200 flex items-center rounded-lg px-6 gap-4">
+          <form
+            onSubmit={handleSearch}
+            className="bg-slate-200 flex items-center rounded-lg px-6 gap-4"
+          >
             <FaSearch color="gray" />
             <input
+              onChange={(e) => setSearchQuery(e.target.value)}
               type="text"
               placeholder="Search"
               className=" py-2 border-none focus:outline-none bg-slate-200"
             />
-          </div>
+          </form>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex gap-6">
@@ -79,6 +91,19 @@ const Navbar = () => {
               )}
             >
               <Text weight="bold">Create</Text>
+            </Link>
+            <Link
+              to={"/account/my-nfts"}
+              className={classNames(
+                "font-bold hover:text-gray-500 whitespace-nowrap pb-2",
+                {
+                  "text-white/80 ": location?.pathname !== "/account/my-nfts",
+                  "text-white border-primary":
+                    location?.pathname == "/account/my-nfts",
+                }
+              )}
+            >
+              <Text weight="bold">Sell</Text>
             </Link>
           </div>
           <ConnectWallet />

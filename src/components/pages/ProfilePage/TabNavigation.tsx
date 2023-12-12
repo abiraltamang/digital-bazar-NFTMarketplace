@@ -1,18 +1,67 @@
-import React from "react";
+import { Tab } from "@headlessui/react";
+import { useState } from "react";
+import { NFT } from "../../../pages/Home";
+import NFTCard from "../../common/Cards/NFTCard";
+import SectionWrapper from "../../common/SectionWrapper";
 
 interface TabNavigationProps {
-  tabs: string[];
+  nftsListed: NFT[];
+  myownNfts: NFT[];
+  loadingState: "not-loaded" | "loaded";
 }
 
-const TabNavigation: React.FC<TabNavigationProps> = ({ tabs }) => {
+const tabs = ["Owned", "Created", "Latest", "Collections"];
+const TabNavigation: React.FC<TabNavigationProps> = ({
+  nftsListed,
+  myownNfts,
+}) => {
+  const [selectedTab, setSelectedTab] = useState(0);
   return (
-    <div className="flex items-center justify-center gap-[61px] mb-[10px]">
-      {tabs.map((tab, index) => (
-        <h1 key={index} className="font-semibold text-[20px] text-[#7B7373]">
-          {tab}
-        </h1>
-      ))}
-    </div>
+    <Tab.Group>
+      <Tab.List className={"flex items-center justify-center gap-6 "}>
+        {tabs.map((tab, index) => (
+          <Tab
+            key={`${tab}-${index}`}
+            className={`font-bold text-primary text-lg focus:outline-none ${
+              selectedTab === index ? "border-b-2 border-primary" : ""
+            }`}
+            onClick={() => setSelectedTab(index)}
+          >
+            {tab}
+          </Tab>
+        ))}
+      </Tab.List>
+      <Tab.Panels>
+        <Tab.Panel>
+          <SectionWrapper>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 py-6">
+              {myownNfts.map((nft, i) => (
+                <NFTCard key={i} nft={nft} />
+              ))}
+            </div>
+          </SectionWrapper>
+        </Tab.Panel>
+        <Tab.Panel>
+          <SectionWrapper>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
+              {nftsListed.map((nft, i) => (
+                <NFTCard key={i} nft={nft} />
+              ))}
+            </div>
+          </SectionWrapper>
+        </Tab.Panel>
+        <Tab.Panel>
+          <div className="h-[150px] w-full flex justify-center items-center">
+            <p>Latest NFTs here</p>
+          </div>
+        </Tab.Panel>
+        <Tab.Panel>
+          <div className="h-[150px] w-full flex justify-center items-center">
+            <p>Colection NFTs here</p>
+          </div>
+        </Tab.Panel>
+      </Tab.Panels>
+    </Tab.Group>
   );
 };
 

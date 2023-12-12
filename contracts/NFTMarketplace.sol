@@ -189,4 +189,11 @@ contract NFTMarketplace is ERC721URIStorage {
         }
         return items;
     }
+
+    //returns the only one market item based on token
+    function fetchTokenDetails(
+        uint256 tokenId
+    ) public view returns (MarketItem memory) {
+        return idToMarketItem[tokenId];
+    }
 }

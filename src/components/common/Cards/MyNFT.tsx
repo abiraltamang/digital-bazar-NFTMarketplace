@@ -13,7 +13,7 @@ const MyNFT = ({ nft, listNFT }: MyNFTProps) => {
   const gatewayUrl = "https://ipfs.io";
 
   return (
-    <div>
+    <div className="flex flex-col  items-center">
       <div className="relative max-w-xs h-72 rounded-2xl overflow-hidden  transition-opacity group">
         <img
           src={`${gatewayUrl}/ipfs/${cid}`}
@@ -28,7 +28,11 @@ const MyNFT = ({ nft, listNFT }: MyNFTProps) => {
           </Text>
         </div>
       </div>
-      <Button className="bg-primary/60" onClick={() => listNFT(nft)}>
+      <Button
+        rounded
+        className="bg-primary w-32 text-white hover:bg-primary/80 mt-3"
+        onClick={() => listNFT(nft)}
+      >
         List
       </Button>
     </div>

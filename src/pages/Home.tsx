@@ -92,6 +92,7 @@ export default function Homepage() {
             image: meta.data.image,
             name: meta.data.name,
             description: meta.data.description,
+            tokenUri,
           };
 
           return formattedItem;
@@ -140,7 +141,7 @@ export default function Homepage() {
     <>
       <Banner />
       <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
-      <TrendingSection customText="Trending Categories" />
+      <TrendingSection nfts={nfts} customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
       {/* <Test /> */}
