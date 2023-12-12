@@ -881,6 +881,13 @@
   resolved "https://registry.npmjs.org/@fontsource/work-sans/-/work-sans-5.0.15.tgz#1896541fc9e892ea957a540b406914c4be80a4cb"
   integrity sha512-2KoJgL8eVLbWbgB552o7m8knknzlCD+lzFY2+vA1QEHMbxqzigAu4Wpx/KfLIW8zaH90BTF1WZvwAEBeQpJpjA==
 
+"@headlessui/react@^1.7.17":
+  version "1.7.17"
+  resolved "https://registry.npmjs.org/@headlessui/react/-/react-1.7.17.tgz#a0ec23af21b527c030967245fd99776aa7352bc6"
+  integrity sha512-4am+tzvkqDSSgiwrsEpGWqgGo9dz8qU5M3znCkC4PgkpY4HcCZzEDEvozltGGGHIKl9jbXbZPSH5TWn4sWJdow==
+  dependencies:
+    client-only "^0.0.1"
+
 "@heroicons/react@^2.0.18":
   version "2.0.18"
   resolved "https://registry.npmjs.org/@heroicons/react/-/react-2.0.18.tgz#f80301907c243df03c7e9fd76c0286e95361f7c1"
@@ -3225,6 +3232,11 @@ cli-table3@^0.5.0:
     string-width "^2.1.1"
   optionalDependencies:
     colors "^1.1.2"
+
+client-only@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.npmjs.org/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
+  integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
 clipboardy@^3.0.0:
   version "3.0.0"
@@ -6236,6 +6248,15 @@ react-loader-spinner@^5.4.5:
     styled-components "^5.3.5"
     styled-tools "^1.7.2"
 
+react-preloaders@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/react-preloaders/-/react-preloaders-3.0.3.tgz#291b54c7f9456e29de019b67d0be3c3cf0c9275c"
+  integrity sha512-kDqXpJBK+HLRHpYvVHWLMdQo2Y7sqdNBS19YKzLZD6spkAJbEPd256GrZqwNn6b+/MX+1dLHPMBczbFEX7lWRA==
+  dependencies:
+    prop-types "^15.7.2"
+    react "^16.8.6"
+    styled-components "^5.0.0-beta.0"
+
 react-refresh@^0.14.0:
   version "0.14.0"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
@@ -6884,7 +6905,7 @@ strip-json-comments@3.1.1, strip-json-comments@^3.1.1:
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
-styled-components@^5.3.3, styled-components@^5.3.5:
+styled-components@^5.0.0-beta.0, styled-components@^5.3.3, styled-components@^5.3.5:
   version "5.3.11"
   resolved "https://registry.npmjs.org/styled-components/-/styled-components-5.3.11.tgz#9fda7bf1108e39bf3f3e612fcc18170dedcd57a8"
   integrity sha512-uuzIIfnVkagcVHv9nE0VPlHPSCmXIUGKfJ42LNjxCCTDTL5sgnJ8Z7GZBq0EnLYGln77tPpEpExt2+qa+cZqSw==

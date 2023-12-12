@@ -36,7 +36,6 @@ export interface MarketItem {
 //@ts-expect-error config
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
-import Preloader from "../components/common/Preloader.js";
 
 export default function Homepage() {
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -142,7 +141,7 @@ export default function Homepage() {
     <>
       <Banner />
       <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
-      <TrendingSection customText="Trending Categories" />
+      <TrendingSection nfts={nfts} customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
       {/* <Test /> */}
