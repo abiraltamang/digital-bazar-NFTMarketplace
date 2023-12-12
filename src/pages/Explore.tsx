@@ -1,12 +1,17 @@
 import ExploreBody from "../components/pages/ExplorePage/ExploreBody";
-import GridList from "../components/pages/ExplorePage/GridList";
+import Text from "../components/common/Typography/Text";
+import SectionWrapper from "../components/common/SectionWrapper";
 
 const Explore = () => {
   return (
-    <div>
-      <GridList />
+    <SectionWrapper>
+      <div className="flex justify-center">
+        <Text title weight="bold" className="text-black/60">
+          Explore Collections
+        </Text>
+      </div>
       <ExploreBody />
-    </div>
+    </SectionWrapper>
   );
 };
 

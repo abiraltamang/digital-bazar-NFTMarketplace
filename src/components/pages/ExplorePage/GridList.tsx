@@ -1,4 +1,4 @@
-import Dropdown from "./Dropdown";
+import Dropdown from "./ExploreDropdown";
 
 const GridList = () => {
   return (
