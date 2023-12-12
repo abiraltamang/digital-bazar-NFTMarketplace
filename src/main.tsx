@@ -20,6 +20,7 @@ import GettingStarted from "./components/pages/HelpCenter/GettingStarted";
 import Buying from "./components/pages/HelpCenter/Buying";
 import Creating from "./components/pages/HelpCenter/Creating";
 import Selling from "./components/pages/HelpCenter/Selling";
+import SearchPage from "./pages/SearchPage";
 
 // Set the Sepolia test network details
 const sepoliaTestnet = {
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/product",
+        path: "/product/:tokenId",
         element: <Product />,
       },
       {
@@ -118,6 +119,10 @@ const router = createBrowserRouter([
       {
         path: "/helpcenter/selling",
         element: <Selling />,
+      },
+      {
+        path: "/search",
+        element: <SearchPage />,
       },
     ],
   },
