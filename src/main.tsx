@@ -101,23 +101,23 @@ const router = createBrowserRouter([
         element: <ResellNFT />,
       },
       {
-        path: "/helpcenter",
+        path: "/help",
         element: <HelpCenter />,
       },
       {
-        path: "/helpcenter/gettingstarted",
+        path: "/help/gettingstarted",
         element: <GettingStarted />,
       },
       {
-        path: "/helpcenter/buying",
+        path: "/help/buying",
         element: <Buying />,
       },
       {
-        path: "/helpcenter/creating",
+        path: "/help/creating",
         element: <Creating />,
       },
       {
-        path: "/helpcenter/selling",
+        path: "/help/selling",
         element: <Selling />,
       },
       {

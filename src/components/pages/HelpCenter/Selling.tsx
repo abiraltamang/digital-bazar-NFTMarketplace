@@ -29,20 +29,31 @@ const Selling = () => {
           <div className="pt-5 space-y-5 mb-10">
             <h1 className="text-xl font-medium">Steps to sell an NFT</h1>
             <h1>
-              Step 1: Hover over the "Create" button on the top of Digital
-              Bazaar home page and then click on "Create"
+              Step 1: Hover over the "Sell" button on the top of Digital Bazaar
+              home page and then click on "Sell"
             </h1>
-            <img src="/8.png" alt="img" className="w-[400px]" />
+            <img src="/11.png" alt="img" className="w-[400px]" />
             <h1>
-              Step 2: Upload all the details of the NFT that you want to create.
+              Step 2: Choose the item/s that you would like to list and then
+              click on "List".
             </h1>
-            <img src="/9.png" alt="img" className="w-[500px] h-[250px]" />
+            <img src="/12.png" alt="img" className="w-[325px] h-[325px]" />
             <h1>
-              Step 3: After placing all the details, click on the "Create NFT"
-              button.
+              Step 3: Choose the price that you would like to sell each item for
+              and then click on "List NFT"
             </h1>
-            <img src="/10.png" alt="img" className="w-[325px] h-[171px]" />
-            <h1>Congratulations! You have just created your amazing NFT.</h1>
+            <img src="/13.png" alt="img" className="w-[325px] h-[171px]" />
+            <h1>
+              Step 4: Lastly, sign the message in your wallet to agree to sell
+              your item/s.
+            </h1>
+            <img src="/14.png" alt="img" className="w-[325px] h-[400px]" />
+            <img src="/15.png" alt="img" className="w-[325px] h-[171px]" />
+            <h1>
+              Now, your item/s will be up for sale! <br />
+              Your items that are on sale will appear on your profile, under "On
+              sale."
+            </h1>
           </div>
         </div>
       </div>
