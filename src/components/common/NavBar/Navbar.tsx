@@ -122,7 +122,6 @@ const Navbar = () => {
           <Link to="/account">
             <MdOutlineAccountCircle color="white" size="30" />
           </Link>
-          <MdLocalGroceryStore color="white" size="30" />
         </div>
       </nav>
     </div>
