@@ -110,9 +110,33 @@ const ExploreBody = () => {
   const { isConnected } = useWeb3ModalAccount();
   const { open } = useWeb3Modal();
 
-  async function buyNft(nft: NFT) {
-    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+  // async function buyNft(nft: NFT) {
+  //   /* needs the user to sign the transaction, so will use Web3Provider and sign it */
 
+  //   if (!isConnected) {
+  //     open();
+  //   }
+  //   if (!walletProvider) {
+  //     throw Error("Wallet provider is undefined");
+  //   }
+  //   const provider = new BrowserProvider(walletProvider);
+  //   const signer = await provider.getSigner();
+  //   const contract = new ethers.Contract(
+  //     marketplaceAddress,
+  //     NFTMarketplace.abi,
+  //     signer
+  //   );
+
+  //   /* user will be prompted to pay the asking proces to complete the transaction */
+  //   const price = ethers.parseUnits(nft.price.toString(), "ether");
+  //   const transaction = await contract.createMarketSale(nft.tokenId, {
+  //     value: price,
+  //   });
+  //   await transaction.wait();
+  //   loadNFTs();
+  // }
+
+  async function placeBid(nft: NFT, bidAmount: string) {
     if (!isConnected) {
       open();
     }
@@ -127,9 +151,8 @@ const ExploreBody = () => {
       signer
     );
 
-    /* user will be prompted to pay the asking proces to complete the transaction */
-    const price = ethers.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(nft.tokenId, {
+    const price = ethers.parseUnits(bidAmount.toString(), "ether");
+    const transaction = await contract.placeBid(nft.tokenId, {
       value: price,
     });
     await transaction.wait();
@@ -151,7 +174,12 @@ const ExploreBody = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {nfts.map((nft, index: number) => (
-          <HotBidCard key={index} nft={nft} buyNft={() => buyNft(nft)} />
+          <HotBidCard
+            key={index}
+            nft={nft}
+            // buyNft={() => buyNft(nft)}
+            placeBid={(bidAmount) => placeBid(nft, bidAmount)}
+          />
         ))}
       </div>
     </div>

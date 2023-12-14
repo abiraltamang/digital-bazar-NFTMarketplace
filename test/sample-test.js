@@ -6,6 +6,7 @@ describe("NFTMarket", function () {
     const nftMarketplace = await NFTMarketplace.deploy();
     await nftMarketplace.waitForDeployment();
 
+    const startTime = Math.floor(Date.now() / 1000);
     let listingPrice = await nftMarketplace.getListingPrice();
     listingPrice = listingPrice.toString();
 
@@ -15,25 +16,31 @@ describe("NFTMarket", function () {
     await nftMarketplace.createToken(
       "https://www.mytokenlocation.com",
       auctionPrice,
-      { value: listingPrice }
+      { value: listingPrice, startTime }
     );
     await nftMarketplace.createToken(
       "https://www.mytokenlocation2.com",
       auctionPrice,
-      { value: listingPrice }
+      { value: listingPrice, startTime }
     );
 
     const [buyerAddress] = await ethers.getSigners();
 
-    /* execute sale of token to another user */
+    const higherAmount = ethers.parseUnits("2", "ether");
+    /* place  bids on the tokens*/
     await nftMarketplace
       .connect(buyerAddress)
-      .createMarketSale(1, { value: auctionPrice });
+      .placeBid(1, { value: higherAmount });
+    await nftMarketplace
+      .connect(buyerAddress)
+      .placeBid(2, { value: higherAmount });
 
-    /* resell a token */
-    await nftMarketplace
-      .connect(buyerAddress)
-      .resellToken(1, auctionPrice, { value: listingPrice });
+    // Wait for the required auction duration (in seconds)
+    await ethers.provider.send("evm_increaseTime", [172800]); // Increase time by 1 hour
+
+    /* end the auctions to finalize the sales */
+    await nftMarketplace.endAuction(1);
+    await nftMarketplace.endAuction(2);
 
     /* query for and return the unsold items */
     var items = await nftMarketplace.fetchMarketItems();

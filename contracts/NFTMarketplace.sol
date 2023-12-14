@@ -13,6 +13,17 @@ contract NFTMarketplace is ERC721URIStorage {
     uint256 public listingPrice = 0.025 ether;
     address payable public owner;
 
+    uint256 public auctionDuration = 5 minutes;
+    mapping(uint256 => Auction) private idToAuction;
+
+    struct Auction {
+        uint256 tokenId;
+        address payable highestBidder;
+        uint256 highestBid;
+        uint256 endTime;
+        bool ended;
+    }
+
     mapping(uint256 => MarketItem) private idToMarketItem;
 
     struct MarketItem {
@@ -29,6 +40,18 @@ contract NFTMarketplace is ERC721URIStorage {
         address owner,
         uint256 price,
         bool sold
+    );
+
+    event AuctionCreated(
+        uint256 indexed tokenId,
+        address creator,
+        uint256 endTime
+    );
+    event BidPlaced(uint256 indexed tokenId, address bidder, uint256 bidAmount);
+    event AuctionEnded(
+        uint256 indexed tokenId,
+        address winner,
+        uint256 winningBid
     );
 
     constructor() ERC721("Metaverse Tokens", "METT") {
@@ -63,8 +86,8 @@ contract NFTMarketplace is ERC721URIStorage {
         return newTokenId;
     }
 
-    function createMarketItem(uint256 tokenId, uint256 price) private {
-        require(price > 0, "Price must be at least 1 wei");
+    function createMarketItem(uint256 tokenId, uint256 startingPrice) private {
+        require(startingPrice > 0, "Price must be at least 1 wei");
         require(
             msg.value == listingPrice,
             "Price must be equal to listing price"
@@ -74,18 +97,97 @@ contract NFTMarketplace is ERC721URIStorage {
             tokenId,
             payable(msg.sender),
             payable(address(this)),
-            price,
+            startingPrice,
             false
         );
 
+        // Create an auction for the item
+        idToAuction[tokenId] = Auction(
+            tokenId,
+            payable(address(0)),
+            startingPrice,
+            block.timestamp + auctionDuration,
+            false
+        );
+
+        console.log("Auction created for tokenId:", tokenId);
+        console.log("Auction end time:", idToAuction[tokenId].endTime);
+
+        emit AuctionCreated(tokenId, msg.sender, idToAuction[tokenId].endTime);
         _transfer(msg.sender, address(this), tokenId);
         emit MarketItemCreated(
             tokenId,
             msg.sender,
             address(this),
-            price,
+            startingPrice,
             false
         );
+    }
+
+    function placeBid(uint256 tokenId) public payable {
+        Auction storage auction = idToAuction[tokenId];
+
+        require(block.timestamp < auction.endTime, "Auction has ended");
+        require(
+            msg.value > auction.highestBid,
+            "Bid must be higher than the current highest bid"
+        );
+
+        if (auction.highestBidder != address(0)) {
+            // Refund the previous highest bidder
+            payable(auction.highestBidder).transfer(auction.highestBid);
+        }
+
+        console.log("Placing bid for tokenId:", tokenId);
+        console.log("Auction end time:", auction.endTime);
+
+        auction.highestBidder = payable(msg.sender);
+        auction.highestBid = msg.value;
+
+        emit BidPlaced(tokenId, msg.sender, msg.value);
+    }
+
+    function endAuction(uint256 tokenId) public {
+        Auction storage auction = idToAuction[tokenId];
+
+        require(!auction.ended, "Auction has already ended");
+        require(
+            block.timestamp >= auction.endTime,
+            "Auction has not ended yet"
+        );
+
+        auction.ended = true;
+
+        if (auction.highestBidder != address(0)) {
+            // Transfer NFT to the highest bidder
+            _transfer(address(this), auction.highestBidder, tokenId);
+
+            // Transfer funds to the seller
+            payable(idToMarketItem[tokenId].seller).transfer(
+                auction.highestBid
+            );
+
+            emit AuctionEnded(
+                tokenId,
+                auction.highestBidder,
+                auction.highestBid
+            );
+        } else {
+            // If no bids, return the NFT to the seller
+            _transfer(address(this), idToMarketItem[tokenId].seller, tokenId);
+        }
+    }
+
+    function checkAndEndAuctions() public {
+        uint256 itemCount = _tokenIds;
+
+        for (uint256 i = 1; i <= itemCount; i++) {
+            Auction storage auction = idToAuction[i];
+
+            if (!auction.ended && block.timestamp >= auction.endTime) {
+                endAuction(i);
+            }
+        }
     }
 
     /* allows someone to resell a token they have purchased */
@@ -109,19 +211,9 @@ contract NFTMarketplace is ERC721URIStorage {
 
     /* Creates the sale of a marketplace item */
     /* Transfers ownership of the item, as well as funds between parties */
-    function createMarketSale(uint256 tokenId) public payable {
-        uint256 price = idToMarketItem[tokenId].price;
-        require(
-            msg.value == price,
-            "Please submit the asking price in order to complete the purchase"
-        );
-        idToMarketItem[tokenId].owner = payable(msg.sender);
-        idToMarketItem[tokenId].sold = true;
-        idToMarketItem[tokenId].seller = payable(address(0));
-        _itemsSold++;
-        _transfer(address(this), msg.sender, tokenId);
-        payable(owner).transfer(listingPrice);
-        payable(idToMarketItem[tokenId].seller).transfer(msg.value);
+    function createMarketSale(uint256 tokenId) public {
+        endAuction(tokenId);
+        checkAndEndAuctions();
     }
 
     /* Returns all unsold market items */

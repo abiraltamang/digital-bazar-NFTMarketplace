@@ -3,18 +3,22 @@ import Button from "../Button/Button";
 import { extractCIDFromImage } from "../../../utils";
 import { NFT } from "../../../pages/Home";
 import { useNavigate } from "react-router-dom";
+import BiddingModal from "./BiddingModal";
+import { useState } from "react";
 
 interface HotBidCardProps {
   nft: NFT;
-  buyNft: (nft: NFT) => void;
+  placeBid: (bidAmount: string) => void;
 }
 
-const HotBidCard = ({ nft, buyNft }: HotBidCardProps) => {
+const HotBidCard = ({ nft, placeBid }: HotBidCardProps) => {
   const { image, name, price } = nft;
   const cid = extractCIDFromImage(image);
   const gatewayUrl = "https://ipfs.io";
   const navigate = useNavigate();
-  console.log(nft.tokenUri);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   return (
     <div className="bg-gray-100 max-w-xs border rounded-md p-4 space-y-3 hover:shadow-lg hover:shadow-slate-300 transition-none ease-in-out delay-500">
       <div
@@ -44,10 +48,17 @@ const HotBidCard = ({ nft, buyNft }: HotBidCardProps) => {
       <Button
         className="hover:bg-primary/80 bg-primary/90 text-white"
         size="small"
-        onClick={() => buyNft(nft)}
+        onClick={() => setIsModalOpen(!isModalOpen)}
       >
-        <Text>Buy Now</Text>
+        <Text>Place Bid</Text>
       </Button>
+      {isModalOpen && (
+        <BiddingModal
+          onClose={() => setIsModalOpen(!isModalOpen)}
+          nft={nft}
+          onPlaceBid={placeBid}
+        />
+      )}
     </div>
   );
 };

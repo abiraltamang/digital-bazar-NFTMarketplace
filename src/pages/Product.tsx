@@ -97,9 +97,7 @@ const Product = () => {
 
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(nft.tokenId, {
-      value: price,
-    });
+    const transaction = await contract.createMarketSale(nft.tokenId);
     await transaction.wait();
   }
   return (
