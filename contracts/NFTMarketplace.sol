@@ -21,6 +21,7 @@ contract NFTMarketplace is ERC721URIStorage {
         address payable owner;
         uint256 price;
         bool sold;
+        string audioURI;
     }
 
     event MarketItemCreated(
@@ -28,7 +29,8 @@ contract NFTMarketplace is ERC721URIStorage {
         address seller,
         address owner,
         uint256 price,
-        bool sold
+        bool sold,
+        string audioURI
     );
 
     constructor() ERC721("Metaverse Tokens", "METT") {
@@ -52,18 +54,23 @@ contract NFTMarketplace is ERC721URIStorage {
     /* Mints a token and lists it in the marketplace */
     function createToken(
         string memory tokenURI,
-        uint256 price
+        uint256 price,
+        string memory audioURI
     ) public payable returns (uint256) {
         _tokenIds++;
         uint256 newTokenId = _tokenIds;
 
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
-        createMarketItem(newTokenId, price);
+        createMarketItem(newTokenId, price, audioURI);
         return newTokenId;
     }
 
-    function createMarketItem(uint256 tokenId, uint256 price) private {
+    function createMarketItem(
+        uint256 tokenId,
+        uint256 price,
+        string memory audioURI
+    ) private {
         require(price > 0, "Price must be at least 1 wei");
         require(
             msg.value == listingPrice,
@@ -75,7 +82,8 @@ contract NFTMarketplace is ERC721URIStorage {
             payable(msg.sender),
             payable(address(this)),
             price,
-            false
+            false,
+            audioURI
         );
 
         _transfer(msg.sender, address(this), tokenId);
@@ -84,12 +92,17 @@ contract NFTMarketplace is ERC721URIStorage {
             msg.sender,
             address(this),
             price,
-            false
+            false,
+            audioURI
         );
     }
 
     /* allows someone to resell a token they have purchased */
-    function resellToken(uint256 tokenId, uint256 price) public payable {
+    function resellToken(
+        uint256 tokenId,
+        uint256 price,
+        string memory audioURI
+    ) public payable {
         require(
             idToMarketItem[tokenId].owner == msg.sender,
             "Only item owner can perform this operation"
@@ -102,6 +115,7 @@ contract NFTMarketplace is ERC721URIStorage {
         idToMarketItem[tokenId].price = price;
         idToMarketItem[tokenId].seller = payable(msg.sender);
         idToMarketItem[tokenId].owner = payable(address(this));
+        idToMarketItem[tokenId].audioURI = audioURI;
         _itemsSold--;
 
         _transfer(msg.sender, address(this), tokenId);

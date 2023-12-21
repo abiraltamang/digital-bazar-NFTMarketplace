@@ -7,14 +7,17 @@ describe("NFTMarket", function () {
     await nftMarketplace.waitForDeployment();
 
     let listingPrice = await nftMarketplace.getListingPrice();
-    listingPrice = listingPrice.toString();
 
-    const auctionPrice = ethers.parseUnits("1", "ether");
+    // const listingPrice = ethers.parseUnits("0.025", "ether");
+    console.log("listing price: ", listingPrice);
+    const auctionPrice = ethers.parseUnits("0.025", "ether");
+    console.log("auction price: ", auctionPrice);
 
     /* create two tokens */
     await nftMarketplace.createToken(
       "https://www.mytokenlocation.com",
       auctionPrice,
+      "https://www.myaudiolocation.com/audio.mp3",
       { value: listingPrice }
     );
     await nftMarketplace.createToken(
@@ -45,6 +48,7 @@ describe("NFTMarket", function () {
           tokenId: i.tokenId.toString(),
           seller: i.seller,
           owner: i.owner,
+          audioUri: i.audioURI,
           tokenUri,
         };
         return item;
