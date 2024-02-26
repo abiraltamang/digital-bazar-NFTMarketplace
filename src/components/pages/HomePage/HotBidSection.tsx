@@ -3,8 +3,10 @@ import SectionWrapper from "../../common/SectionWrapper";
 import Text from "../../common/Typography/Text";
 import { NFT } from "../../../pages/Home";
 import { FallingLines } from "react-loader-spinner";
+import { IoIosRefresh } from "react-icons/io";
 
 interface HotBidSectionProps {
+  refresh: ()=>void;
   sectionText?: string;
   loadingState?: "loaded" | "not-loaded";
   nfts: NFT[];
@@ -12,6 +14,7 @@ interface HotBidSectionProps {
 }
 
 const HotBidSection: React.FC<HotBidSectionProps> = ({
+  refresh,
   sectionText = "🔥 Explore Latest NFTs",
   nfts,
   placeBid,
@@ -24,13 +27,16 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({
   return (
     <SectionWrapper>
       {sectionText && (
-        <Text
-          className="text-center text-black/60 pb-8"
-          title
-          weight="semibold"
-        >
-          {sectionText}
-        </Text>
+        <div className="flex items-center gap-3 justify-center pb-8">
+          <Text
+            className="text-center text-black/60 "
+            title
+            weight="semibold"
+          >
+            {sectionText}
+          </Text>
+          <IoIosRefresh  onClick={refresh} />
+        </div>
       )}
       {loadingState == "not-loaded" ? (
         <div className="flex justify-center items-center gap-4 ">

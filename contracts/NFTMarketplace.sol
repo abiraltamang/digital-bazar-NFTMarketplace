@@ -150,36 +150,48 @@ contract NFTMarketplace is ERC721URIStorage {
         emit BidPlaced(tokenId, msg.sender, msg.value);
     }
 
-    function endAuction(uint256 tokenId) public {
-        Auction storage auction = idToAuction[tokenId];
+function endAuction(uint256 tokenId) public {
+    console.log("Ending auction for tokenId:", tokenId);
 
-        require(!auction.ended, "Auction has already ended");
-        require(
-            block.timestamp >= auction.endTime,
-            "Auction has not ended yet"
+    Auction storage auction = idToAuction[tokenId];
+
+    require(!auction.ended, "Auction has already ended");
+    require(
+        block.timestamp >= auction.endTime,
+        "Auction has not ended yet"
+    );
+
+    auction.ended = true;
+
+    if (auction.highestBidder != address(0)) {
+        // Transfer NFT to the highest bidder
+        _transfer(address(this), auction.highestBidder, tokenId);
+
+        // Transfer funds to the seller
+        payable(idToMarketItem[tokenId].seller).transfer(
+            auction.highestBid
         );
 
-        auction.ended = true;
+        // Mark the item as sold
+        idToMarketItem[tokenId].sold = true;
+        idToMarketItem[tokenId].owner = payable(auction.highestBidder);
+        idToMarketItem[tokenId].seller = payable(address(0));
+        _itemsSold++;
 
-        if (auction.highestBidder != address(0)) {
-            // Transfer NFT to the highest bidder
-            _transfer(address(this), auction.highestBidder, tokenId);
+        // Transfer the listing price to the owner
+        payable(owner).transfer(listingPrice);
 
-            // Transfer funds to the seller
-            payable(idToMarketItem[tokenId].seller).transfer(
-                auction.highestBid
-            );
-
-            emit AuctionEnded(
-                tokenId,
-                auction.highestBidder,
-                auction.highestBid
-            );
-        } else {
-            // If no bids, return the NFT to the seller
-            _transfer(address(this), idToMarketItem[tokenId].seller, tokenId);
-        }
+        emit AuctionEnded(
+            tokenId,
+            auction.highestBidder,
+            auction.highestBid
+        );
+    } else {
+        // If no bids, return the NFT to the seller
+        _transfer(address(this), idToMarketItem[tokenId].seller, tokenId);
     }
+    console.log("Auction ended for tokenId:", tokenId);
+}
 
     function checkAndEndAuctions() public {
         uint256 itemCount = _tokenIds;
