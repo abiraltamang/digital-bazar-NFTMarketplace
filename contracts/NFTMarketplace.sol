@@ -14,6 +14,8 @@ contract NFTMarketplace is ERC721URIStorage {
     address payable public owner;
 
     uint256 public auctionDuration = 5 minutes;
+    uint256 public lastAutomatedTime;
+
     mapping(uint256 => Auction) private idToAuction;
 
     struct Auction {
@@ -56,6 +58,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
     constructor() ERC721("Metaverse Tokens", "METT") {
         owner = payable(msg.sender);
+        lastAutomatedTime = block.timestamp;
     }
 
     /* Updates the listing price of the contract */
@@ -287,5 +290,11 @@ contract NFTMarketplace is ERC721URIStorage {
         uint256 tokenId
     ) public view returns (MarketItem memory) {
         return idToMarketItem[tokenId];
+    }
+
+    function automateAuctions() external {
+        require(block.timestamp >= lastAutomatedTime + 2 minutes, "Too soon to automate auctions");
+        lastAutomatedTime = block.timestamp;
+        checkAndEndAuctions();
     }
 }

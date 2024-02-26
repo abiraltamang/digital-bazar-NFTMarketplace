@@ -8,13 +8,13 @@ interface HotBidSectionProps {
   sectionText?: string;
   loadingState?: "loaded" | "not-loaded";
   nfts: NFT[];
-  buyNFT: (nft: NFT) => void;
+  placeBid: (nft: NFT, bidAmount: number) => void;
 }
 
 const HotBidSection: React.FC<HotBidSectionProps> = ({
   sectionText = "🔥 Explore Latest NFTs",
   nfts,
-  buyNFT,
+  placeBid,
   loadingState,
 }) => {
   const sortedNfts = [...nfts].sort(
@@ -43,7 +43,7 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2  md:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {sortedNfts.map((nft, index: number) => (
-              <HotBidCard key={index} nft={nft} buyNft={buyNFT} />
+              <HotBidCard key={index} nft={nft} placeBid={placeBid} />
             ))}
           </div>
         </>

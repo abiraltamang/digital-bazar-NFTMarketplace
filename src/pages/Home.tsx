@@ -112,9 +112,36 @@ export default function Homepage() {
   const { isConnected } = useWeb3ModalAccount();
   const { open } = useWeb3Modal();
 
-  async function buyNft(nft: NFT) {
-    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+  // async function buyNft(nft: NFT) {
+  //   /* needs the user to sign the transaction, so will use Web3Provider and sign it */
 
+  //   if (!isConnected) {
+  //     open();
+  //   }
+  //   if (!walletProvider) {
+  //     throw Error("Wallet provider is undefined");
+  //   }
+  //   const provider = new BrowserProvider(walletProvider);
+  //   const signer = await provider.getSigner();
+  //   const contract = new ethers.Contract(
+  //     marketplaceAddress,
+  //     NFTMarketplace.abi,
+  //     signer
+  //   );
+
+  //   /* user will be prompted to pay the asking proces to complete the transaction */
+  //   const price = ethers.parseUnits(nft.price.toString(), "ether");
+  //   const transaction = await contract.createMarketSale(nft.tokenId, {
+  //     value: price,
+  //   });
+  //   await transaction.wait();
+  //   loadNFTs();
+  // }
+
+
+  async function placeBid(nft: NFT, bidPrice: number) {
+    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+  
     if (!isConnected) {
       open();
     }
@@ -128,19 +155,25 @@ export default function Homepage() {
       NFTMarketplace.abi,
       signer
     );
-
-    /* user will be prompted to pay the asking proces to complete the transaction */
-    const price = ethers.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(nft.tokenId, {
-      value: price,
+  
+    /* user will be prompted to pay the bid price to place the bid */
+    const bidAmount = ethers.parseUnits(bidPrice.toString(), "ether");
+    const transaction = await contract.placeBid(nft.tokenId, {
+      value: bidAmount,
     });
     await transaction.wait();
     loadNFTs();
   }
+  
+
   return (
     <>
       <Banner />
-      <HotBidSection nfts={nfts} buyNFT={buyNft} loadingState={loadingState} />
+      <HotBidSection
+        nfts={nfts}
+        placeBid={placeBid}
+        loadingState={loadingState}
+      />
       <TrendingSection nfts={nfts} customText="Trending Categories" />
       <CollectionSection />
       <HowItWorks />
