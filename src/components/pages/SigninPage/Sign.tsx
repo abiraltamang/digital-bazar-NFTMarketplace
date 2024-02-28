@@ -1,22 +1,48 @@
 import Text from "../../common/Typography/Text";
 import { useWeb3Modal } from "@web3modal/ethers/react";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Sign = () => {
-
   const { open } = useWeb3Modal();
-  const { isConnected } = useWeb3ModalAccount();
-
+  const { isConnected, address } = useWeb3ModalAccount();
   const navigate = useNavigate();
 
+  const [showModal, setShowModal] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
-    // Redirect to homepage when Metamask is connected
+    // Open modal when Metamask is connected
     if (isConnected) {
-     navigate('/')
+      setShowModal(true);
     }
   }, [isConnected]);
+
+  const handleSubmit = () => {
+    // Make a request to the endpoint with username, email, and wallet address
+    axios.post("http://localhost:8000/insert", {
+      username,
+      email,
+      // Assuming `address` is defined elsewhere in your component
+      wallet_address: address,
+    })
+      .then((response) => {
+        if (response) {
+          console.log("Data inserted successfully");
+          // Redirect to homepage or any other page
+          navigate("/");
+        } else {
+          console.error("Failed to insert data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  
 
   return (
     <div className="flex">
@@ -31,9 +57,6 @@ const Sign = () => {
           Choose One Of Available Wallet Providers Or <br />
           Create A New Wallet. What is a Wallet?
         </Text>
-        {/* <div className="mb-[30px]">
-          <TabNavigation />
-        </div> */}
         <div className="flex flex-col px-[50px] gap-7">
           <div
             onClick={() => open()}
@@ -42,8 +65,35 @@ const Sign = () => {
             <img src="/metamask.png" alt="logo" className="w-[25px]" />
             <p className="font-bold text-md">Connect with Metamask</p>
           </div>
-         
-          
+          {showModal && (
+            <div className="modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary p-8 rounded-lg shadow-lg">
+              <Text title variant={2} className="text-white">You are almost there</Text>
+              <Text className="max-w-xl text-white/80 my-4">
+                Choose a display name and enter your email address to receive
+                updates when your NFTs sell or receive offers.
+              </Text>
+              <input
+                type="text"
+                placeholder="Display Name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
+              />
+              <input
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
+              />
+              <button
+                onClick={handleSubmit}
+                className="bg-secondary hover:bg-secondary/80  text-primary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Submit
+              </button>
+            </div>
+          )}
           <div className="px-[90px] py-[20px] border-2 border-secondary flex flex-row justify-center items-center gap-[20px] text-black rounded-full">
             <img src="/torus.png" alt="logo" className="w-[25px]" />
             <p className="font-bold text-md">Torus</p>
