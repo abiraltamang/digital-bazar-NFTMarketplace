@@ -5,7 +5,6 @@ import Text from "../Typography/Text";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { MdOutlineAccountCircle } from "react-icons/md";
-import { MdLocalGroceryStore } from "react-icons/md";
 import ConnectWallet from "../Button/ConnectWallet";
 import { useNavigate } from "react-router-dom";
 
