@@ -14,7 +14,7 @@ import { NFT, MarketItem } from "./Home";
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
-type UserType ={
+export type UserType ={
   id: number, 
   username: string,
   email: string,

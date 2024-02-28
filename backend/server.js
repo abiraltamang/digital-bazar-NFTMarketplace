@@ -93,6 +93,40 @@ app.post("/user", (req, res) => {
   });
 });
 
+// Update profile endpoint
+app.put('/update-profile', async (req, res) => {
+    try {
+        const { wallet_address, username, email, bio, socialNetworks } = req.body;
+
+        // Construct the SQL query to update the user profile
+        const query = `
+            UPDATE users
+            SET 
+                username = ?,
+                email = ?,
+                bio = ?,
+                social_networks = ?
+            WHERE
+                wallet_address = ?
+        `;
+
+        // Execute the query with the provided data
+        await con.query(query, [username, email, bio, socialNetworks, wallet_address]);
+
+        // Check if any rows were affected by the update
+        if (con.rowsAffected === 0) {
+            res.status(404).send('User not found');
+        } else {
+            res.status(200).send('Profile updated successfully');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+  
+
 app.listen(8000, () => {
   console.log("Server running at https://localhost:8000");
 });
