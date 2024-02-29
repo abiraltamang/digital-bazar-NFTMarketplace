@@ -14,7 +14,17 @@ import { NFT, MarketItem } from "./Home";
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
+export type UserType ={
+  id: number, 
+  username: string,
+  email: string,
+  wallet_address: string,
+  bio: string,
+  social_networks: string
+}
+
 const Profile = () => {
+  const [user, setUser] = useState<UserType | undefined >(); 
   const [nftsListed, setNftsListed] = useState<NFT[]>([]);
   const [ownedNfts, setOwnedNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,12 +42,25 @@ const Profile = () => {
         open();
       }
       if (walletProvider) {
+        loadUserData();
         loadNFTs();
       }
     } finally {
       setLoading(false);
     }
   }, [walletProvider]);
+
+  async function loadUserData() {
+    try {
+      const response = await axios.post("http://localhost:8000/user", {
+        wallet_address: address,
+      });
+      setUser(response.data);
+      console.log("user info",response.data); // Set user data in state
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    }
+  }
 
   async function loadNFTs() {
     try {
@@ -136,8 +159,8 @@ const Profile = () => {
         walletAddress={address}
         coverImage="/image1.png"
         profileImage="/profile.jpeg"
-        name="Arbin Koirala"
-        description={
+        username={user?.username || "DigitalDabbler"}
+        description={ user?.bio ||
           " Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."
         }
       />

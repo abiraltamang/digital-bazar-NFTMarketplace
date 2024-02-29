@@ -1,16 +1,15 @@
-import { useWeb3Modal } from "@web3modal/ethers/react";
 import { useWeb3ModalAccount, useDisconnect } from "@web3modal/ethers/react";
 import { useState, useEffect, useRef } from "react";
 import { TbLogout } from "react-icons/tb";
 import { RiFileCopy2Line } from "react-icons/ri";
 import { shortenAddress } from "../../../utils";
+import { Link } from "react-router-dom";
 
 export default function ConnectButton() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const disconnectRef = useRef<HTMLDivElement | null>(null);
 
   const { address, isConnected } = useWeb3ModalAccount();
-  const { open } = useWeb3Modal();
   const { disconnect } = useDisconnect();
 
   //for closing the disconnect button, when clicked outside of it
@@ -40,12 +39,13 @@ export default function ConnectButton() {
   return (
     <>
       {!isConnected ? (
-        <button
-          className="border-[1px] border-secondary px-2 py-1 text-secondary rounded-lg"
-          onClick={() => open()}
-        >
-          Connect Wallet
-        </button>
+        <Link to={"/signin"}>
+          <button
+            className="border-[1px] border-secondary px-2 py-1 text-secondary rounded-lg"
+          >
+            Connect Wallet
+          </button>
+        </Link>
       ) : (
         <div className="relative" ref={disconnectRef}>
           <button
