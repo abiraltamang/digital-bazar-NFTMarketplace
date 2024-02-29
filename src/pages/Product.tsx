@@ -29,6 +29,7 @@ const Product = () => {
     sold: false,
   });
   const [loadingState, setloadingState] = useState(false);
+  // const [transactions, setTransactions] = useState([]);
   const { tokenId } = useParams();
   const { walletProvider } = useWeb3ModalProvider();
   const { isConnected } = useWeb3ModalAccount();
@@ -41,6 +42,7 @@ const Product = () => {
     }
     if (walletProvider) {
       fetchNFT();
+      fetchTransaction();
     }
   }, [walletProvider]);
 
@@ -101,6 +103,45 @@ const Product = () => {
       value: price,
     });
     await transaction.wait();
+  }
+
+  async function fetchTransaction() {
+    if (!walletProvider) {
+      throw Error("Wallet provider is not defined");
+    }
+    try {
+      const filter = {
+        address: marketplaceAddress,
+        fromBlock: 0,
+        toBlock: "latest",
+        topics: [ethers.id("Transfer(address,address,uint256)")],
+      };
+      const provider = new BrowserProvider(walletProvider);
+      const logs = await provider.getLogs(filter);
+
+      // Iterate through logs and extract relevant information
+      logs.forEach((log) => {
+        const parsedLog = ethers.defaultAbiCoder.decode(
+          ["address", "address", "uint256"],
+          ethers.hexDataSlice(log.data, 4)
+        );
+        const from = parsedLog[0];
+        const to = parsedLog[1];
+        const tokenId = parsedLog[2];
+
+        // Check if the tokenId matches the one you're interested in
+        if (tokenId.eq(tokenId)) {
+          console.log(`Transaction Details for Token ID ${tokenId}:`);
+          console.log(`   From: ${from}`);
+          console.log(`   To: ${to}`);
+          // Add more details as needed
+        }
+      });
+      console.log("transactions details", logs);
+      // setTransactions(transactions);
+    } catch (error) {
+      console.log("Error fetching transactions logs");
+    }
   }
   return (
     <div>
