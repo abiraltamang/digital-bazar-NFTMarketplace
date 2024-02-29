@@ -159,42 +159,6 @@
         "ERC721URIStorage"
       ]
     },
-    "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
-      "lastModificationDate": 1708266845708,
-      "contentHash": "9c54c6c065d9e590fdcdd72c451425b9",
-      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Strings"
-      ]
-    },
     "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/utils/Context.sol": {
       "lastModificationDate": 1708266845708,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
@@ -267,10 +231,10 @@
         "Address"
       ]
     },
-    "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
-      "lastModificationDate": 1708266845700,
-      "contentHash": "27d219ec6f69478d065fdbfa7931da68",
-      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
+    "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1708266845708,
+      "contentHash": "9c54c6c065d9e590fdcdd72c451425b9",
+      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
         "version": "0.8.20",
         "settings": {
@@ -295,14 +259,12 @@
           }
         }
       },
-      "imports": [
-        "../../utils/introspection/IERC165.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "IERC721"
+        "Strings"
       ]
     },
     "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
@@ -377,6 +339,44 @@
       ],
       "artifacts": [
         "IERC721Receiver"
+      ]
+    },
+    "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+      "lastModificationDate": 1708266845700,
+      "contentHash": "27d219ec6f69478d065fdbfa7931da68",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721"
       ]
     },
     "/Users/mrblon/Documents/FInal year project 7th sem/digital-bazar-NFTMarketplace/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {

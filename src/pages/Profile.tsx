@@ -159,7 +159,7 @@ const Profile = () => {
         walletAddress={address}
         coverImage="/image1.png"
         profileImage="/profile.jpeg"
-        username={user?.username}
+        username={user?.username || "DigitalDabbler"}
         description={ user?.bio ||
           " Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."
         }

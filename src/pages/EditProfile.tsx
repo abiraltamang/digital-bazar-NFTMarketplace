@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SectionWrapper from "../components/common/SectionWrapper";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { UserType } from "./Profile";
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const { address } = useWeb3ModalAccount();
-  const [user, setUser] = useState<UserType | undefined>();
   const [formData, setFormData] = useState({
     username: "",
     wallet_address: "",
@@ -26,13 +24,12 @@ const EditProfile = () => {
       const response = await axios.post("http://localhost:8000/user", {
         wallet_address: address,
       });
-      setUser(response.data);
       setFormData({
         username: response.data.username,
         wallet_address: response.data.wallet_address,
         email: response.data.email,
         bio: response.data.bio,
-        socialNetworks: response.data.socialNetworks,
+        socialNetworks: response.data.social_networks,
       });
       console.log("user info", response.data); // Set user data in state
     } catch (error) {

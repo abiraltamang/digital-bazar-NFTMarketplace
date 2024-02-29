@@ -1,6 +1,8 @@
 import express from "express";
 import mysql from "mysql";
 import cors from "cors";
+import multer from "multer";
+import { readFileSync, unlinkSync } from "fs";
 
 const app = express();
 
@@ -8,6 +10,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// Multer configuration for file upload
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Directory to store uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.get("/", (req, res) => {
   res.json({ message: "ok" });
@@ -94,12 +108,12 @@ app.post("/user", (req, res) => {
 });
 
 // Update profile endpoint
-app.put('/update-profile', async (req, res) => {
-    try {
-        const { wallet_address, username, email, bio, socialNetworks } = req.body;
+app.put("/update-profile", async (req, res) => {
+  try {
+    const { wallet_address, username, email, bio, socialNetworks } = req.body;
 
-        // Construct the SQL query to update the user profile
-        const query = `
+    // Construct the SQL query to update the user profile
+    const query = `
             UPDATE users
             SET 
                 username = ?,
@@ -110,22 +124,63 @@ app.put('/update-profile', async (req, res) => {
                 wallet_address = ?
         `;
 
-        // Execute the query with the provided data
-        await con.query(query, [username, email, bio, socialNetworks, wallet_address]);
+    // Execute the query with the provided data
+    await con.query(query, [
+      username,
+      email,
+      bio,
+      socialNetworks,
+      wallet_address,
+    ]);
 
-        // Check if any rows were affected by the update
-        if (con.rowsAffected === 0) {
-            res.status(404).send('User not found');
-        } else {
-            res.status(200).send('Profile updated successfully');
-        }
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).send('Internal server error');
+    // Check if any rows were affected by the update
+    if (con.rowsAffected === 0) {
+      res.status(404).send("User not found");
+    } else {
+      res.status(200).send("Profile updated successfully");
     }
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).send("Internal server error");
+  }
 });
 
-  
+
+// Upload image endpoint
+app.post("/upload", upload.single("image"), (req, res) => {
+  const { wallet_address } = req.body;
+  const image = readFileSync(req.file.path);
+  const sql = "UPDATE users SET image = ? WHERE wallet_address = ?";
+  con.query(sql, [image, wallet_address], (err, result) => {
+    if (err) {
+      console.error("Error updating image:", err);
+      return res.status(500).json({ error: "Error updating image" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    console.log("Image updated successfully");
+    unlinkSync(req.file.path); // Remove the uploaded file after insertion
+    return res.status(200).json({ message: "Image updated successfully" });
+  });
+});
+
+// Retrieve image endpoint
+app.get("/image/:walletAddress", (req, res) => {
+  const { walletAddress } = req.params;
+  const sql = "SELECT image FROM users WHERE wallet_address = ?";
+  con.query(sql, [walletAddress], (err, result) => {
+    if (err) {
+      console.error("Error fetching image:", err);
+      return res.status(500).json({ error: "Error fetching image" });
+    }
+    if (result.length === 0 || !result[0].image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+    res.writeHead(200, { "Content-Type": "image/jpeg" });
+    res.end(result[0].image, "binary");
+  });
+});
 
 app.listen(8000, () => {
   console.log("Server running at https://localhost:8000");
