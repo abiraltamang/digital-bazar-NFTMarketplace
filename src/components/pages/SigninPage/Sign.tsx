@@ -3,7 +3,16 @@ import { useWeb3Modal } from "@web3modal/ethers/react";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required("Display Name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+});
 
 const Sign = () => {
   const { open } = useWeb3Modal();
@@ -43,6 +52,15 @@ const Sign = () => {
       });
   };
 
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+    },
+    validationSchema: validationSchema, // Apply Yup validation schema
+    onSubmit: handleSubmit,
+  });
+
   return (
     <div className="flex">
       <div className="flex-1">
@@ -58,14 +76,14 @@ const Sign = () => {
         </Text>
         <div className="flex flex-col px-[50px] gap-7">
           {isConnected ? (
-             <div
-             onClick={() => open()}
-             className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full"
-           >
-             <img src="/metamask.png" alt="logo" className="w-[25px]" />
-             <p className="font-bold text-md">Connected</p>
-           </div>
-          ):(
+            <div
+              onClick={() => open()}
+              className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full"
+            >
+              <img src="/metamask.png" alt="logo" className="w-[25px]" />
+              <p className="font-bold text-md">Connected</p>
+            </div>
+          ) : (
             <div
               onClick={() => open()}
               className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full cursor-pointer"
@@ -95,33 +113,53 @@ const Sign = () => {
                   />
                 </svg>
               </button>
-              <Text title variant={2} className="text-white">
-                You are almost there
-              </Text>
-              <Text className="max-w-xl text-white/80 my-4">
-                Choose a display name and enter your email address to receive
-                updates when your NFTs sell or receive offers.
-              </Text>
-              <input
-                type="text"
-                placeholder="Display Name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
-              />
-              <input
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
-              />
-              <button
-                onClick={handleSubmit}
-                className="bg-secondary hover:bg-secondary/80  text-primary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Submit
-              </button>
+              <form onSubmit={formik.handleSubmit}>
+                <Text title variant={2} className="text-white">
+                  You are almost there
+                </Text>
+                <Text className="max-w-xl text-white/80 my-4">
+                  Choose a display name and enter your email address to receive
+                  updates when your NFTs sell or receive offers.
+                </Text>
+                {/* Display Name input */}
+                <input
+                  type="text"
+                  placeholder="Display Name"
+                  name="username"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500"
+                />
+                {/* Display validation error if exists */}
+                {formik.touched.username && formik.errors.username ? (
+                  <div className="text-red-500 mb-2">
+                    {formik.errors.username}
+                  </div>
+                ) : null}
+                {/* Email input */}
+                <input
+                  type="email"
+                  placeholder="Enter email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500"
+                />
+                {/* Display validation error if exists */}
+                {formik.touched.email && formik.errors.email ? (
+                  <div className="text-red-500 mb-2">{formik.errors.email}</div>
+                ) : null}
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  disabled={!formik.isValid} // Disable button if form is not valid
+                  className="bg-secondary hover:bg-secondary/80 text-primary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                  Submit
+                </button>
+              </form>
             </div>
           )}
 
