@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { shortenAddress } from "../../../utils";
 import Text from "../../common/Typography/Text";
+import { FaPencilAlt } from "react-icons/fa";
 
 interface ProfileCardProps {
   coverImage: string;
@@ -41,9 +42,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             {shortenAddress(walletAddress || "")}
           </Text>
         </div>
-        <Text weight="semibold" className="text-[#5F5858] pt-3 ">
-          {description}
-        </Text>
+        <div className=" flex justify-center px-20">
+          <Text weight="semibold" className="text-[#5F5858] pt-3  ">
+            {description}
+          </Text>
+        </div>
         <div className="flex items-center justify-center space-x-[20px] mt-[20px]">
           <div className="w-[40px] h-[40px] bg-[#00477F] rounded-[15px] flex items-center justify-center">
             <img src="/Share.png" alt="shareicon" />
@@ -53,7 +56,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </div>
           <Link to="/editprofile">
             <div className="w-[40px] h-[40px] bg-[#00477F] rounded-[15px] flex items-center justify-center">
-              <img src="/Ellipsis.png" alt="ellipsisicon" />
+              <FaPencilAlt color="white" />
             </div>
           </Link>
         </div>

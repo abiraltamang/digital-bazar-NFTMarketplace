@@ -23,17 +23,17 @@ const Sign = () => {
 
   const handleSubmit = () => {
     // Make a request to the endpoint with username, email, and wallet address
-    axios.post("http://localhost:8000/insert", {
-      username,
-      email,
-      // Assuming `address` is defined elsewhere in your component
-      wallet_address: address,
-    })
+    axios
+      .post("http://localhost:8000/insert", {
+        username,
+        email,
+        wallet_address: address,
+      })
       .then((response) => {
         if (response) {
           console.log("Data inserted successfully");
           // Redirect to homepage or any other page
-          navigate("/");
+          navigate("/account");
         } else {
           console.error("Failed to insert data");
         }
@@ -42,7 +42,6 @@ const Sign = () => {
         console.error("Error:", error);
       });
   };
-  
 
   return (
     <div className="flex">
@@ -58,16 +57,47 @@ const Sign = () => {
           Create A New Wallet. What is a Wallet?
         </Text>
         <div className="flex flex-col px-[50px] gap-7">
-          <div
-            onClick={() => open()}
-            className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full"
-          >
-            <img src="/metamask.png" alt="logo" className="w-[25px]" />
-            <p className="font-bold text-md">Connect with Metamask</p>
-          </div>
+          {isConnected ? (
+             <div
+             onClick={() => open()}
+             className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full"
+           >
+             <img src="/metamask.png" alt="logo" className="w-[25px]" />
+             <p className="font-bold text-md">Connected</p>
+           </div>
+          ):(
+            <div
+              onClick={() => open()}
+              className="px-[90px] py-[20px] bg-primary flex flex-row justify-center items-center gap-[20px] text-white rounded-full cursor-pointer"
+            >
+              <img src="/metamask.png" alt="logo" className="w-[25px]" />
+              <p className="font-bold text-md">Connect with Metamask</p>
+            </div>
+          )}
           {showModal && (
             <div className="modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary p-8 rounded-lg shadow-lg">
-              <Text title variant={2} className="text-white">You are almost there</Text>
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-2 right-2 text-white hover:text-gray-300 focus:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <Text title variant={2} className="text-white">
+                You are almost there
+              </Text>
               <Text className="max-w-xl text-white/80 my-4">
                 Choose a display name and enter your email address to receive
                 updates when your NFTs sell or receive offers.
@@ -94,15 +124,16 @@ const Sign = () => {
               </button>
             </div>
           )}
-          <div className="px-[90px] py-[20px] border-2 border-secondary flex flex-row justify-center items-center gap-[20px] text-black rounded-full">
+
+          <div className="px-[90px] cursor-pointer py-[20px] border-2 border-secondary flex flex-row justify-center items-center gap-[20px] text-black rounded-full">
             <img src="/torus.png" alt="logo" className="w-[25px]" />
             <p className="font-bold text-md">Torus</p>
           </div>
-          <div className="px-[90px] py-[20px] border-2 border-secondary  flex flex-row justify-center items-center gap-[20px] text-black rounded-full">
+          <div className="px-[90px] py-[20px] cursor-pointer border-2 border-secondary  flex flex-row justify-center items-center gap-[20px] text-black rounded-full">
             <img src="/mobilewallet.jpg" alt="logo" className="w-[25px]" />
             <p className="font-bold text-md">Connect Wallet</p>
           </div>
-          <div className="px-[90px] py-[20px] border-2 border-secondary  flex flex-row justify-center items-center text-black rounded-full">
+          <div className="px-[90px] py-[20px] cursor-pointer border-2 border-secondary  flex flex-row justify-center items-center text-black rounded-full">
             <p className="font-bold text-md">Show More Option</p>
           </div>
         </div>

@@ -108,24 +108,36 @@ app.post("/user", (req, res) => {
 });
 
 // Update profile endpoint
-app.put("/update-profile", async (req, res) => {
+app.post("/update-profile", upload.single("image"), async (req, res) => {
   try {
     const { wallet_address, username, email, bio, socialNetworks } = req.body;
 
+    let imageUrl = null; // Initialize imageUrl variable
+
+    // Check if an image file was uploaded
+    if (req.file) {
+      const image = readFileSync(req.file.path);
+      const updateImageSql =
+        "UPDATE users SET image = ? WHERE wallet_address = ?";
+      await con.query(updateImageSql, [image, wallet_address]);
+      imageUrl = `/image/${wallet_address}`; // Set imageUrl to the endpoint to retrieve the image
+      unlinkSync(req.file.path); // Remove the uploaded file after insertion
+    }
+
     // Construct the SQL query to update the user profile
-    const query = `
-            UPDATE users
-            SET 
-                username = ?,
-                email = ?,
-                bio = ?,
-                social_networks = ?
-            WHERE
-                wallet_address = ?
-        `;
+    const updateProfileSql = `
+      UPDATE users
+      SET 
+        username = ?,
+        email = ?,
+        bio = ?,
+        social_networks = ?
+      WHERE
+        wallet_address = ?
+    `;
 
     // Execute the query with the provided data
-    await con.query(query, [
+    await con.query(updateProfileSql, [
       username,
       email,
       bio,
@@ -137,14 +149,15 @@ app.put("/update-profile", async (req, res) => {
     if (con.rowsAffected === 0) {
       res.status(404).send("User not found");
     } else {
-      res.status(200).send("Profile updated successfully");
+      res
+        .status(200)
+        .json({ message: "Profile updated successfully", imageUrl });
     }
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).send("Internal server error");
   }
 });
-
 
 // Upload image endpoint
 app.post("/upload", upload.single("image"), (req, res) => {
