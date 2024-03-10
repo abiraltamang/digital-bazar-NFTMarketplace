@@ -32,6 +32,8 @@ const Sign = () => {
 
   const handleSubmit = () => {
     // Make a request to the endpoint with username, email, and wallet address
+
+    console.log("testing", "username--", username, "email---", email, address);
     axios
       .post("http://localhost:8000/insert", {
         username,
@@ -127,7 +129,10 @@ const Sign = () => {
                   placeholder="Display Name"
                   name="username"
                   value={formik.values.username}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    setUsername(e.target.value); // Update the username state
+                    formik.handleChange(e); // Call the formik handleChange function
+                  }}
                   onBlur={formik.handleBlur}
                   className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500"
                 />
@@ -143,7 +148,10 @@ const Sign = () => {
                   placeholder="Enter email"
                   name="email"
                   value={formik.values.email}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    setEmail(e.target.value); // Update the email state
+                    formik.handleChange(e); // Call the formik handleChange function
+                  }}
                   onBlur={formik.handleBlur}
                   className="block w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500"
                 />

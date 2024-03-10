@@ -3,7 +3,6 @@ import TabNavigation from "../components/pages/ProfilePage/TabNavigation";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
-  useWeb3Modal,
 } from "@web3modal/ethers/react";
 import axios from "axios";
 import { BrowserProvider, ethers } from "ethers";
@@ -14,17 +13,17 @@ import { NFT, MarketItem } from "./Home";
 import { marketplaceAddress } from "../../config.js";
 import NFTMarketplace from "../../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
-export type UserType ={
-  id: number, 
-  username: string,
-  email: string,
-  wallet_address: string,
-  bio: string,
-  social_networks: string
-}
+export type UserType = {
+  id: number;
+  username: string;
+  email: string;
+  wallet_address: string;
+  bio: string;
+  social_networks: string;
+};
 
 const Profile = () => {
-  const [user, setUser] = useState<UserType | undefined >(); 
+  const [user, setUser] = useState<UserType | undefined>();
   const [nftsListed, setNftsListed] = useState<NFT[]>([]);
   const [ownedNfts, setOwnedNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState(false);
@@ -33,13 +32,12 @@ const Profile = () => {
   );
   const { walletProvider } = useWeb3ModalProvider();
   const { isConnected, address } = useWeb3ModalAccount();
-  const { open } = useWeb3Modal();
 
   useEffect(() => {
     try {
       if (!isConnected) {
         setLoading(true);
-        open();
+        // open();
       }
       if (walletProvider) {
         loadUserData();
@@ -56,7 +54,6 @@ const Profile = () => {
         wallet_address: address,
       });
       setUser(response.data);
-      console.log("user info",response.data); // Set user data in state
     } catch (error) {
       console.error("Error loading user data:", error);
     }
@@ -160,7 +157,8 @@ const Profile = () => {
         coverImage="/image1.png"
         profileImage="/profile.jpeg"
         username={user?.username || "DigitalDabbler"}
-        description={ user?.bio ||
+        description={
+          user?.bio ||
           " Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."
         }
       />

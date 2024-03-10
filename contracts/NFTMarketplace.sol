@@ -13,7 +13,7 @@ contract NFTMarketplace is ERC721URIStorage {
     uint256 public listingPrice = 0.025 ether;
     address payable public owner;
 
-    uint256 public auctionDuration = 5 minutes;
+    uint256 public auctionDuration = 1 minutes;
     uint256 public lastAutomatedTime;
 
     mapping(uint256 => Auction) private idToAuction;
@@ -350,5 +350,36 @@ contract NFTMarketplace is ERC721URIStorage {
         );
         lastAutomatedTime = block.timestamp;
         checkAndEndAuctions();
+    }
+
+    // Restart the auction for an NFT
+    function restartAuction(uint256 tokenId, uint256 startingPrice) public {
+        require(
+            msg.sender == ownerOf(tokenId) ||
+                idToMarketItem[tokenId].seller == msg.sender,
+            "You must be the owner or the seller of the token to restart the auction"
+        );
+        require(
+            idToMarketItem[tokenId].isAuction,
+            "This token is not currently listed for auction"
+        );
+        require(
+            !idToMarketItem[tokenId].sold,
+            "This token has already been sold"
+        );
+
+        uint256 endTime = block.timestamp + auctionDuration;
+
+        // Update auction details
+        idToAuction[tokenId].highestBidder = payable(address(0));
+        idToAuction[tokenId].highestBid = 0;
+        idToAuction[tokenId].endTime = endTime;
+        idToAuction[tokenId].ended = false;
+
+        // Update market item details
+        idToMarketItem[tokenId].price = startingPrice;
+        idToMarketItem[tokenId].endTime = endTime;
+
+        emit AuctionCreated(tokenId, msg.sender, endTime);
     }
 }
