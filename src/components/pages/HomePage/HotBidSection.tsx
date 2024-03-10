@@ -6,11 +6,12 @@ import { FallingLines } from "react-loader-spinner";
 import { IoIosRefresh } from "react-icons/io";
 
 interface HotBidSectionProps {
-  refresh: ()=>void;
+  refresh: () => void;
   sectionText?: string;
   loadingState?: "loaded" | "not-loaded";
   nfts: NFT[];
   placeBid: (nft: NFT, bidAmount: number) => void;
+  buyNft: (nft: NFT) => void;
 }
 
 const HotBidSection: React.FC<HotBidSectionProps> = ({
@@ -18,6 +19,7 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({
   sectionText = "🔥 Explore Latest NFTs",
   nfts,
   placeBid,
+  buyNft,
   loadingState,
 }) => {
   const sortedNfts = [...nfts].sort(
@@ -28,14 +30,10 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({
     <SectionWrapper>
       {sectionText && (
         <div className="flex items-center gap-3 justify-center pb-8">
-          <Text
-            className="text-center text-black/60 "
-            title
-            weight="semibold"
-          >
+          <Text className="text-center text-black/60 " title weight="semibold">
             {sectionText}
           </Text>
-          <IoIosRefresh  onClick={refresh} />
+          <IoIosRefresh onClick={refresh} />
         </div>
       )}
       {loadingState == "not-loaded" ? (
@@ -49,7 +47,12 @@ const HotBidSection: React.FC<HotBidSectionProps> = ({
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2  md:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {sortedNfts.map((nft, index: number) => (
-              <HotBidCard key={index} nft={nft} placeBid={placeBid} />
+              <HotBidCard
+                key={index}
+                nft={nft}
+                placeBid={placeBid}
+                buyNft={buyNft}
+              />
             ))}
           </div>
         </>

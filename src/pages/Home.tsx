@@ -7,6 +7,7 @@ import TrendingSection from "../components/pages/HomePage/TrendingSection";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BrowserProvider } from "ethers";
+import { calculateRemainingTime } from "../utils/index.js";
 import * as ethers from "ethers";
 import {
   useWeb3ModalProvider,
@@ -24,6 +25,9 @@ export interface NFT {
   description: string;
   tokenUri?: string;
   sold?: boolean;
+  isAuction?: boolean;
+  endTime?: bigint;
+  remainingTime?: bigint;
 }
 export interface MarketItem {
   tokenId: number;
@@ -31,6 +35,8 @@ export interface MarketItem {
   owner: string;
   price: number;
   sold: boolean;
+  isAuction: boolean;
+  endTime: bigint;
 }
 
 //@ts-expect-error config
@@ -83,7 +89,6 @@ export default function Homepage() {
             meta = await axios.get(tokenUri);
           }
 
-          // Format the item details
           const formattedItem = {
             price: ethers.formatUnits(item.price.toString(), "ether"),
             tokenId: item.tokenId,
@@ -93,15 +98,30 @@ export default function Homepage() {
             name: meta.data.name,
             description: meta.data.description,
             tokenUri,
+            isAuction: item.isAuction,
+            endTime: BigInt(item.endTime), // Cast to BigInt
+            remainingTime: calculateRemainingTime(BigInt(item.endTime)), // Cast to BigInt
           };
 
-          return formattedItem;
+          // Filter out NFTs with ended auctions and keep resold tokens
+          if (
+            formattedItem.isAuction &&
+            formattedItem.remainingTime !== "Auction ended"
+          ) {
+            return formattedItem;
+          } else if (!formattedItem.isAuction) {
+            return formattedItem;
+          } else {
+            return null;
+          }
         })
       );
-      console.log(items);
+
+      // Filter out null values
+      const filteredItems = items.filter((item) => item !== null);
 
       // Update the state with the fetched NFTs
-      setNfts(items);
+      setNfts(filteredItems);
       setLoadingState("loaded");
     } catch (error) {
       console.error("Error loading NFTs:", error);
@@ -114,7 +134,7 @@ export default function Homepage() {
 
   async function placeBid(nft: NFT, bidPrice: number) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
-  
+
     if (!isConnected) {
       open();
     }
@@ -128,7 +148,7 @@ export default function Homepage() {
       NFTMarketplace.abi,
       signer
     );
-  
+
     /* user will be prompted to pay the bid price to place the bid */
     const bidAmount = ethers.parseUnits(bidPrice.toString(), "ether");
     const transaction = await contract.placeBid(nft.tokenId, {
@@ -138,10 +158,8 @@ export default function Homepage() {
     loadNFTs();
   }
 
-
   async function checkAndEndAuctions() {
     try {
-
       if (!isConnected) {
         open();
       }
@@ -161,15 +179,41 @@ export default function Homepage() {
       console.error("Error checking and ending auctions:", error);
     }
   }
-  
+
+  async function buyNft(nft: NFT) {
+    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+
+    if (!isConnected) {
+      open();
+    }
+    if (!walletProvider) {
+      throw Error("Wallet provider is undefined");
+    }
+    const provider = new BrowserProvider(walletProvider);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(
+      marketplaceAddress,
+      NFTMarketplace.abi,
+      signer
+    );
+
+    /* user will be prompted to pay the asking proces to complete the transaction */
+    const price = ethers.parseUnits(nft.price.toString(), "ether");
+    const transaction = await contract.buyNFT(nft.tokenId, {
+      value: price,
+    });
+    await transaction.wait();
+    loadNFTs();
+  }
 
   return (
     <>
       <Banner />
       <HotBidSection
-      refresh={checkAndEndAuctions}
+        refresh={checkAndEndAuctions}
         nfts={nfts}
         placeBid={placeBid}
+        buyNft={buyNft}
         loadingState={loadingState}
       />
       <TrendingSection nfts={nfts} customText="Trending Categories" />

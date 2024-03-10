@@ -27,6 +27,7 @@ const Product = () => {
     description: "",
     tokenUri: "",
     sold: false,
+    isAuction: false,
   });
   const [loadingState, setloadingState] = useState(false);
   const { tokenId } = useParams();
@@ -74,6 +75,7 @@ const Product = () => {
         owner: tokenDetails.owner,
         tokenUri,
         tokenId,
+        isAuction: tokenDetails.isAuction,
       });
     } catch (error) {
       console.error("Error fetching NFT:", error);
@@ -97,11 +99,37 @@ const Product = () => {
 
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(nft.tokenId, {
+    const transaction = await contract.buyNFT(nft.tokenId, {
       value: price,
     });
     await transaction.wait();
   }
+
+  async function placeBid(nft: NFT, bidPrice: number) {
+    /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+
+    if (!isConnected) {
+      open();
+    }
+    if (!walletProvider) {
+      throw Error("Wallet provider is undefined");
+    }
+    const provider = new BrowserProvider(walletProvider);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(
+      marketplaceAddress,
+      NFTMarketplace.abi,
+      signer
+    );
+
+    /* user will be prompted to pay the bid price to place the bid */
+    const bidAmount = ethers.parseUnits(bidPrice.toString(), "ether");
+    const transaction = await contract.placeBid(nft.tokenId, {
+      value: bidAmount,
+    });
+    await transaction.wait();
+  }
+
   return (
     <div>
       {loadingState ? (
@@ -116,7 +144,7 @@ const Product = () => {
           <p className="text-center text-black/60">Loading</p>
         </div>
       ) : (
-        <ProductDetail nft={nft} buyNFT={buyNft} />
+        <ProductDetail nft={nft} buyNFT={buyNft} placeBid={placeBid} />
       )}
 
       {/* <HotBidSection sectionText="More From This Collection" /> */}

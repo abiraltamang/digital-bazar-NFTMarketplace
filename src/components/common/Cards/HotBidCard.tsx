@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Button/Button";
 import Text from "../Typography/Text";
 import BiddingModal from "./BiddingModal";
@@ -9,14 +9,36 @@ import { useNavigate } from "react-router-dom";
 interface HotBidCardProps {
   nft: NFT;
   placeBid: (nft: NFT, bidAmount: number) => void;
+  buyNft: (nft: NFT) => void;
 }
 
-const HotBidCard: React.FC<HotBidCardProps> = ({ nft, placeBid }) => {
-  const { image, name, price } = nft;
+const HotBidCard: React.FC<HotBidCardProps> = ({ nft, placeBid, buyNft }) => {
+  const { image, name, price, isAuction, endTime } = nft;
   const cid = extractCIDFromImage(image);
   const gatewayUrl = "https://ipfs.io";
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [remainingTime, setRemainingTime] = useState<string>("");
+
+  useEffect(() => {
+    if (endTime) {
+      const intervalId = setInterval(() => {
+        const now = Math.floor(Date.now() / 1000); // Current time in seconds
+        const remainingSeconds = Number(endTime) - now; // Convert endTime to number
+
+        if (remainingSeconds <= 0) {
+          setRemainingTime("Auction ended");
+        } else {
+          const hours = Math.floor(remainingSeconds / 3600);
+          const minutes = Math.floor((remainingSeconds % 3600) / 60);
+          const seconds = remainingSeconds % 60;
+          setRemainingTime(`${hours}h ${minutes}m ${seconds}s`);
+        }
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [endTime]);
 
   const handlePlaceBid = () => {
     setIsModalOpen(true);
@@ -47,7 +69,7 @@ const HotBidCard: React.FC<HotBidCardProps> = ({ nft, placeBid }) => {
               alt=""
             />
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex items-center justify-between mt-4">
             <div>
               <Text weight="semibold">{name}</Text>
             </div>
@@ -59,13 +81,31 @@ const HotBidCard: React.FC<HotBidCardProps> = ({ nft, placeBid }) => {
             </Text>
           </div>
         </div>
-        <Button
-          className="hover:bg-primary/80 bg-primary/90 text-white"
-          size="small"
-          onClick={handlePlaceBid}
-        >
-          <Text>Place Bid</Text>
-        </Button>
+        {isAuction ? (
+          <Button
+            className="hover:bg-primary/80 bg-primary/90 text-white"
+            size="small"
+            onClick={handlePlaceBid}
+          >
+            <Text>Place Bid</Text>
+          </Button>
+        ) : (
+          <Button
+            className="hover:bg-primary/80 bg-primary/90 text-white"
+            size="small"
+            onClick={() => buyNft(nft)}
+          >
+            <Text>Buy Now</Text>
+          </Button>
+        )}
+        {isAuction && (
+          <div className="flex items-center justify-start">
+            <p className="text-xs">
+              Auction ends in:{" "}
+              <span className="text-xs font-bold">{remainingTime}</span>{" "}
+            </p>
+          </div>
+        )}
       </div>
       <BiddingModal
         isOpen={isModalOpen}

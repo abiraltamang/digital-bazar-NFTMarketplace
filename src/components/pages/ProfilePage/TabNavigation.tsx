@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NFT } from "../../../pages/Home";
 import NFTCard from "../../common/Cards/NFTCard";
 import SectionWrapper from "../../common/SectionWrapper";
+import { Link } from "react-router-dom";
 
 interface TabNavigationProps {
   nftsListed: NFT[];
@@ -36,7 +37,9 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
           <SectionWrapper>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 py-6">
               {myownNfts.map((nft, i) => (
-                <NFTCard key={i} nft={nft} />
+                <Link to="/account/my-nfts">
+                  <NFTCard key={i} nft={nft} />
+                </Link>
               ))}
             </div>
           </SectionWrapper>
