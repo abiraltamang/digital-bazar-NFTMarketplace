@@ -35,22 +35,32 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
       <Tab.Panels>
         <Tab.Panel>
           <SectionWrapper>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 py-6">
-              {myownNfts.map((nft, i) => (
-                <Link to="/account/my-nfts">
+            {myownNfts.length === 0 ? (
+              <p className="text-center text-gray-500">
+                You do not own any NFTs right now.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
+                {myownNfts.map((nft, i) => (
                   <NFTCard key={i} nft={nft} />
-                </Link>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </SectionWrapper>
         </Tab.Panel>
         <Tab.Panel>
           <SectionWrapper>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
-              {nftsListed.map((nft, i) => (
-                <NFTCard key={i} nft={nft} />
-              ))}
-            </div>
+            {nftsListed.length === 0 ? (
+              <p className="text-center text-gray-500">
+                You do not own any NFTs right now.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
+                {nftsListed.map((nft, i) => (
+                  <NFTCard key={i} nft={nft} />
+                ))}
+              </div>
+            )}
           </SectionWrapper>
         </Tab.Panel>
         <Tab.Panel>
