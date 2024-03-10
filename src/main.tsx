@@ -22,6 +22,7 @@ import Creating from "./components/pages/HelpCenter/Creating";
 import Selling from "./components/pages/HelpCenter/Selling";
 import SearchPage from "./pages/SearchPage";
 import HelpCenterLayout from "./components/layout/HelpCenterLayout";
+import ReAuction from "./pages/ReAuction";
 
 // Set the Sepolia test network details
 const sepoliaTestnet = {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: "/resell-nft",
         element: <ResellNFT />,
+      },
+      {
+        path: "/reauction/:tokenId",
+        element: <ReAuction />,
       },
       {
         path: "/help",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ChangeEvent } from 'react';
+import { ChangeEvent } from "react";
 import SectionWrapper from "../components/common/SectionWrapper";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { FaPencilAlt } from "react-icons/fa";
@@ -58,7 +58,7 @@ const EditProfile = () => {
       });
     }
   };
-  
+
   const handleSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     try {

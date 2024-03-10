@@ -3,7 +3,6 @@ import { useState } from "react";
 import { NFT } from "../../../pages/Home";
 import NFTCard from "../../common/Cards/NFTCard";
 import SectionWrapper from "../../common/SectionWrapper";
-import { Link } from "react-router-dom";
 
 interface TabNavigationProps {
   nftsListed: NFT[];
