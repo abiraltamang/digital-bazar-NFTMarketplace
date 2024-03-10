@@ -13,7 +13,7 @@ contract NFTMarketplace is ERC721URIStorage {
     uint256 public listingPrice = 0.025 ether;
     address payable public owner;
 
-    uint256 public auctionDuration = 1 minutes;
+    uint256 public auctionDuration = 2 hours;
     uint256 public lastAutomatedTime;
 
     mapping(uint256 => Auction) private idToAuction;

@@ -33,7 +33,7 @@ const ExploreBody = () => {
     try {
       // Connect to Ethereum provider
       const provider = new ethers.JsonRpcProvider(
-        "https://sepolia.infura.io/v3/eb69522e52ba4c3babe2118a59a0b301"
+        "https://sepolia.infura.io/v3/90fa4d0c68a34e78877c49e801dc1ebb"
       );
 
       // Create a contract instance

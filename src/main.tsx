@@ -30,7 +30,7 @@ const sepoliaTestnet = {
   name: "Sepolia Testnet",
   currency: "ETH",
   explorerUrl: "https://sepolia.etherscan.io/",
-  rpcUrl: "https://sepolia.infura.io/v3/eb69522e52ba4c3babe2118a59a0b301",
+  rpcUrl: "https://sepolia.infura.io/v3/90fa4d0c68a34e78877c49e801dc1ebb",
 };
 
 // Create modal
