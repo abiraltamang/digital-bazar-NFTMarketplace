@@ -10,21 +10,11 @@ const Collection = () => {
         coverImage="/Cover image1.png"
         profileImage="/Profile.png"
         name="Abiral Blon"
-        title={
-          <>
-            Created by <span className="text-[#00477F]">Abiral Blon</span>
-          </>
-        }
-        description={
-          <>
-            Unique, Fully 3D And Built To Unite The Design Multiverse.
-            <br />
-            Designed And Styled By Digimental.
-          </>
-        }
+        title=" Created by Abiral "
+        description="  Unique, Fully 3D And Built To Unite The Design Multiverse. Designed And Styled By Digimental."
       />
       <TabNavigation tabs={tabs} />
-      <TrendingSection showText={false} />
+      <TrendingSection showText={false} nfts={[]} />
     </div>
   );
 };

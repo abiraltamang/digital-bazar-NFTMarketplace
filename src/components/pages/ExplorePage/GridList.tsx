@@ -9,7 +9,6 @@ const GridList = () => {
       <div className="w-[35px] bg-white flex justify-center">
         <img src="/list.png" alt="list" className="w-[30px]" />
       </div>
-      <Dropdown />
     </div>
   );
 };
