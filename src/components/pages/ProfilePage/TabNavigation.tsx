@@ -2,6 +2,7 @@ import { Tab } from "@headlessui/react";
 import { useState } from "react";
 import { NFT } from "../../../pages/Home";
 import NFTCard from "../../common/Cards/NFTCard";
+import NFTCard2 from "../../common/Cards/NFTCard2";
 import SectionWrapper from "../../common/SectionWrapper";
 
 interface TabNavigationProps {
@@ -41,7 +42,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
                 {myownNfts.map((nft, i) => (
-                  <NFTCard key={i} nft={nft} />
+                  <NFTCard2 key={i} nft={nft} />
                 ))}
               </div>
             )}
@@ -51,7 +52,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
           <SectionWrapper>
             {nftsListed.length === 0 ? (
               <p className="text-center text-gray-500">
-                You do not own any NFTs right now.
+                You haven't created any NFTs yet.
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4">
